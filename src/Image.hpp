@@ -37,15 +37,11 @@ class Image {
         inline int getChannels() {return channels;};
 
         Image& convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_height, double kernel[], uint32_t center_row, uint32_t center_col);
-        Image& fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, double ker[], uint32_t center_row, uint32_t center_col);
+        Image& fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
 
-        Image& imageProduct(Image &img, int channel);
-
-        void padKernel(size_t ker_width, size_t ker_height, double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker);
+        void padKernel(size_t ker_width, size_t ker_height, const double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker);
         void diff(Image& img);
 
-
-        void padImg(ComplexMatrix ker, uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker);
     private:
         size_t size;
         int w;

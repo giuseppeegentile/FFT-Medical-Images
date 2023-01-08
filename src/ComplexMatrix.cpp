@@ -64,8 +64,6 @@ ComplexMatrix ComplexMatrix::transpose() {
 }
 
 void ComplexMatrix::dotProduct(ComplexMatrix kernel, ComplexMatrix& res ) {
-    std::cout << "Storage: " << storage[0] << std::endl;
-    std::cout << "kernel: " << kernel(0, 0) << std::endl;
     for(size_t i = 0; i < height; i++){
         for(size_t j = 0; j < width; j++){
             res.add(i, j, (storage[i * width + j]) * kernel(i, j));

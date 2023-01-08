@@ -11,7 +11,7 @@ Image::Image(const char* filename, int channel_force) {
         std::cout << "Reading correctly the image " << filename << std::endl;
         size = w * h * channels;
     }else{
-        std::cout << "ERROR: Incorrect reading the Image" << std::endl;
+        std::cout << "ERROR: Incorrect reading the Image" <<filename << std::endl;
     }
 }
 
@@ -82,7 +82,7 @@ Image& Image::convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_h
 }
 
 
-void Image::padKernel(size_t ker_width, size_t ker_height, double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) {
+void Image::padKernel(size_t ker_width, size_t ker_height, const double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) {
 	//padded so center of kernel is at top left
 	for(long i = -((long)center_row); i < (long)ker_height - center_row; ++i) {
 		uint32_t r = (i<0) ? i + pad_height : i;
@@ -94,14 +94,10 @@ void Image::padKernel(size_t ker_width, size_t ker_height, double ker[], uint32_
 }
 
 
-Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, double ker[], uint32_t center_row, uint32_t center_col) {
+Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::MDFFT;
-	//calculate padding
-	size_t pw = 1 << ((uint8_t)std::ceil(std::log2(w + ker_w - 1)));
-	size_t ph = 1 << ((uint8_t)std::ceil(std::log2(h + ker_h - 1)));
-
 	//pad image
-	ComplexMatrix pad_img(pw, ph);
+	ComplexMatrix pad_img(w, h);
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {
             pad_img.add(i, j, std::complex<double>(data[(i * w + j)* channels + channel], 0));
@@ -109,8 +105,9 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, double k
 	}
 
 	//pad kernel
-	ComplexMatrix pad_ker(pw, ph);
-	padKernel(ker_w, ker_h, ker, center_row, center_col, pw, ph, pad_ker);
+	ComplexMatrix pad_ker(w, h);
+	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
+    //padKernel_second_version(ker_w, ker_h, ker, center_row, center_col, pw, ph, pad_ker);
 
 	//convolution
 
@@ -118,11 +115,10 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, double k
     pad_img = fft_img.solveIterative();
     MDFFT fft_ker(pad_ker);
     pad_ker = fft_ker.solveIterative();
-    ComplexMatrix dot(pw, ph);
+    ComplexMatrix dot(w, h);
     pad_img.dotProduct(pad_ker, dot);
     MDFFT inv(dot);
     dot = inv.getInverse();
-    std::cout << dot(0, 0) << std::endl;
 
 
 	//update pixel data
@@ -136,66 +132,7 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, double k
 	return *this;
 }
 
-void Image::padImg(ComplexMatrix ker, uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) {
-	//padded so center of kernel is at top left
-	for(long i = -((long)center_row); i < (long)ker.getHeight() - center_row; ++i) {
-		uint32_t r = (i<0) ? i + pad_height : i;
-		for(long j = -((long)center_col); j<(long)ker.getWidth() - center_col; ++j) {
-			uint32_t c = (j < 0) ? j + pad_width : j;
-            pad_ker.add(r, c, (ker.getStorage()[(i + center_row) * ker.getWidth()  + (j + center_col)].real(), 0));
-		}
-	}
-}
 
-
-
-Image& Image::imageProduct(Image &img, int channel){
-    using Solver::MDFFT;
-
-	//complex matrix of image (this)
-	ComplexMatrix cpl_img_this(w, h);
-	for(int i = 0; i < h; ++i) {
-		for(int j = 0; j < w; ++j) {
-            cpl_img_this.add(i, j, std::complex<double>(data[(i * w + j)* channels + channel], 0));
-		}
-	}
-
-    	//complex matrix of image (this)
-    ComplexMatrix cpl_img(w, h);
-    for(int i = 0; i < img.getWidth(); ++i) {
-		for(int j = 0; j < img.getHeight(); ++j) {
-            cpl_img.add(i, j, std::complex<double>(img.data[(i * img.getWidth() + j)* channels + channel], 0));
-            //std::cout << cpl_img(i,j) << ", ";
-		}
-        //std::cout << std::endl;
-	}
-	//pad_img(ker, img.getWidth() / 2, img.getHeight() / 2, w, h, cpl_img);
-
-	//convolution
-
-    MDFFT fft_img_this(cpl_img_this);
-    cpl_img_this = fft_img_this.solveIterative();
-
-    MDFFT fft_img(cpl_img);
-    cpl_img = fft_img.solveIterative();
-
-
-    ComplexMatrix dot(w, h);
-    cpl_img_this.dotProduct(cpl_img, dot);
-    MDFFT inv(dot);
-    dot = inv.getInverse();
-    std::cout << dot(0, 0) << std::endl;
-
-	//update pixel data
-	for(int i = 0; i < h; ++i) {
-		for(int j = 0; j < w; ++j) {
-			data[(i * w + j) * channels + channel] = (uint8_t)(round(dot(i, j).real()) < 0 ? 0 : (round(dot(i, j).real()) > 255 ? 255 : round(dot(i, j).real())));
-            //data[(i*w+j)*channels+channel] = (uint8_t)(std::round(dot(i, j).real())); //versione psichedelica
-		}
-	}
-
-	return *this;
-}
 
 void Image::diff(Image& img) {
     int min_channels = channels < img.channels ? channels : img.channels;
