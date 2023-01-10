@@ -250,9 +250,14 @@ constexpr size_t gauss_five_size = 15;
 
 
 
+constexpr double sobel_kernel_x[9] = {-1, 0, 1, 
+                                      -2, 0 ,2,
+                                      -1, 0, 1};
 
 
-
+constexpr double sobel_kernel_y[9] = {-1, -2, -1, 
+                                       0, 0 ,0,
+                                       1, 2, 1};
 
 
 

@@ -2,7 +2,7 @@
 #include "CSV_Reader.hpp"
 #include "Image.hpp"
 #include "Ctz.hpp"
-#include "Filtering_traits.hpp"
+
 
 
 int main() {
@@ -34,25 +34,34 @@ int main() {
         of << o[i].real() << "," << o[i].imag() << "\n";
     }
     of.close();
-    //Image test("../medical_images/stanford/cthead-8bit075.jpg");
-    //Image ref_image("../medical_images/stanford/cthead-8bit075.jpg");
+    Image test("../medical_images/stanford/cthead-8bit075.jpg");
+    Image ref_image("../medical_images/stanford/cthead-8bit075.jpg");
     
+    test.anisotropic_diffusion(ref_image,300, 0.7/*, 200*/);
+    ref_image.write("../src/ani.jpg", ImageType::JPG);
+
+
 
     omp_set_nested(1);
     //double start = omp_get_wtime();
-    for(int i = 1; i < 99; i++){
+    for(int i = 1; i <= 99; i++){
         std::string fn = "../medical_images/stanford/cthead-8bit0" + std::to_string(i) + ".jpg";
         const int length = fn.length();
         char* c = new char[length + 1]; //+1 fot the \n
         strcpy(c, fn.c_str());
         Image test_med(c);
-        #pragma omp parallel for
-        for(int i = 0; i < 3; i++){
+        if(i == 75){
+            Image test_sob(c);
+            test_sob.sobel();
+            test_sob.write("../src/sob.jpg", ImageType::JPG);
+        }
+        //#pragma omp parallel for
+        for(int i = 0; i < test_med.getChannels(); i++){
             test_med.fft_convolve(i, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
         }
         std::string out = "../processed_medical_images/cthead-8bit0" + std::to_string(i) + ".jpg";
         
-        char* c_out = new char[length + 1]; //+1 fot the \n
+        char* c_out = new char[length + 1]; //+1 for the \n
         strcpy(c_out, out.c_str());
         test_med.write(c_out, ImageType::JPG);
     }

@@ -6,22 +6,10 @@
 
 #include "Image.hpp"
 
-Image::Image(const char* filename, int channel_force) {
-    if(read(filename, channel_force)) {
-        std::cout << "Reading correctly the image " << filename << std::endl;
-        size = w * h * channels;
-    }else{
-        std::cout << "ERROR: Incorrect reading the Image" <<filename << std::endl;
-    }
-}
 
-Image::Image(int w_, int h_, int channels_) : w(w_), h(h_), channels(channels_){
-    size = w * h * channels;
-    data = new uint8_t[size];
-}
-Image::~Image() {
-    stbi_image_free(data);
-}
+
+
+
 
 bool Image::read(const char* filename, int channel_force) {
 	data = stbi_load(filename, &w, &h, &channels, channel_force);
@@ -82,7 +70,7 @@ Image& Image::convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_h
 }
 
 
-void Image::padKernel(size_t ker_width, size_t ker_height, const double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) {
+const void Image::padKernel(size_t ker_width, size_t ker_height, const double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) const {
 	//padded so center of kernel is at top left
 	for(long i = -((long)center_row); i < (long)ker_height - center_row; ++i) {
 		uint32_t r = (i<0) ? i + pad_height : i;
@@ -107,7 +95,6 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const do
 	//pad kernel
 	ComplexMatrix pad_ker(w, h);
 	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
-    //padKernel_second_version(ker_w, ker_h, ker, center_row, center_col, pw, ph, pad_ker);
 
 	//convolution
 
@@ -149,6 +136,108 @@ void Image::diff(Image& img) {
     }
 
 }
+
+
+
+const Image& Image::sobel(){
+    Image cpy_x(*this);
+    Image cpy_y(*this);
+    
+    Image gx(getWidth(), getHeight(), getChannels());
+    Image gy(getWidth(), getHeight(), getChannels());
+    for(int c = 0; c < getChannels(); c++){
+        gx = cpy_x.fft_convolve(c, 3, 3, sobel_kernel_x, 1, 1);
+        gy = cpy_y.fft_convolve(c, 3, 3, sobel_kernel_y, 1, 1);
+    }
+/*
+    gx.write("../src/try_x.jpg", ImageType::JPG);
+    gy.write("../src/try_y.jpg", ImageType::JPG);*/
+    //compute the gradient
+    for(int i = 0; i < size; i++)
+        data[i] = std::hypot(gx.getData()[i], gy.getData()[i]) / 8.0;
+
+    return *this;
+
+}
+
+//Perona - Malik equation to calculate the new intensity of each pixels
+//k: sensitivity of the filter
+
+const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k) const {
+    Image g_norm(*this);
+    
+    for(int ch = 0; ch <= getChannels(); ch++){
+        g_norm.sobel();
+        Image newDest(dst);
+        for (int i = 0; i < num_iterations; i++) {
+            for (int y = 1; y < getWidth() - 1; y++) {
+                for (int x = 1; x < getHeight() - 1; x++) {
+                    uint8_t c = data[(y * getWidth() + x) * getChannels() + ch];
+                    uint8_t c_north = data[((y - 1) * getWidth() + x) * getChannels() + ch];
+                    uint8_t c_south = data[((y + 1) * getWidth() + x) * getChannels() + ch];
+                    uint8_t c_west = data[(y * getWidth() + x - 1) * getChannels() + ch];
+                    uint8_t c_east = data[(y * getWidth() + x + 1) * getChannels() + ch];
+
+                    uint8_t grad_north = std::exp(-std::pow(g_norm.data[((y - 1) * getWidth() + x) * getChannels() + ch] / k, 2));
+                    uint8_t grad_south = std::exp(-std::pow(g_norm.data[((y + 1) * getWidth() + x) * getChannels() + ch]/ k, 2));
+                    uint8_t grad_west = std::exp(-std::pow(g_norm.data[(y * getWidth() + x - 1) * getChannels() + ch] / k, 2));
+                    uint8_t grad_east = std::exp(-std::pow(g_norm.data[(y * getWidth() + x + 1) * getChannels() + ch] / k, 2));
+
+                    newDest.data[(y * getWidth() + x) * getChannels() + ch] = c + 0.25 * 
+                                                                                (grad_north * (c_north - c) + 
+                                                                                grad_south * (c_south - c) + 
+                                                                                grad_west * (c_west - c) + 
+                                                                                grad_east * (c_east - c));
+                }
+            }   
+            dst = newDest;         
+        }
+    }
+
+}
+
+
+const void Image::anisotropic_diffusion(const Image& dest, const double dt, const int lambda, const int interations) const  {
+    //Make temp image
+    Image temp(*this);
+    //temp.sobel();
+    //Precalculate tables (for speed up)
+    double* precal = new double[255];
+    double lambda2 = lambda * lambda;
+    for (int f = 0; f < 255; f++) {
+        precal[f] = -dt * f * lambda2 / (lambda2 + f * f);
+    }
+
+    //Apply the filter
+    for(int ch = 0; ch <= channels; ch++){
+        for (int n = 0; n < interations; n++)
+        {
+        
+            for (int i = 0; i < h; i++)
+                for (int j = 0; j < w; j++) {
+                    
+                    const double current =  temp.data[(i * getWidth() + j) * channels + ch];
+
+                    const int px = (j - 1) < 0 ? 0 : ( j - 1);
+                    const int nx = (j + 1) >= j ? j - 1 : j + 1;
+                    const int py = (i - 1) < 0 ? 0 : i - 1;
+                    const int ny = (i + 1) >= i ? i - 1: i + 1;
+
+                    dest.data[(i * getWidth() + j) * channels + ch] = uint8_t
+                                        ((precal[(int)(current - temp.data[(i * getWidth() + px) * channels + ch])] +
+                                        precal[(int)(current - temp.data[(i * getWidth() + nx) * channels + ch])] +
+                                        precal[(int)(current - temp.data[(py * getWidth() + j) * channels + ch])]  +
+                                        precal[(int)(current - temp.data[(ny * getWidth() + j) * channels + ch])] )+
+                                        temp.data[(i * getWidth() + j) * channels + ch]);
+
+                }
+            }
+    }
+
+    delete[] precal;
+}
+
+
 
 #endif
 #endif

@@ -14,11 +14,11 @@ class ComplexMatrix {
 
         //ComplexMatrix(const ComplexMatrix& mat);
 
-        Complex &operator()(const size_t row, const size_t column) {
+        const Complex &operator()(const size_t row, const size_t column) const {
             return storage[row * width + column]; // row major
         }
 
-        inline Complex get(const size_t row, const size_t column) { return storage[row * width + column];}
+        inline  const Complex get(const size_t row, const size_t column) const { return storage[row * width + column];}
 
         void add(const size_t row, ComplexArray vals);
 
@@ -34,11 +34,15 @@ class ComplexMatrix {
 
         ComplexMatrix transpose();
 
-        inline ComplexArray getStorage() {return storage;};
+        inline const ComplexArray getStorage() const {return storage;};
         
+        const void print() const;
 
         void dotProduct(ComplexMatrix kernel, ComplexMatrix& res );
+        
+        const ComplexMatrix magnitude(ComplexMatrix& other) const;
 
+        void normalize(const Complex& val);
 
     private:
         ComplexArray storage;

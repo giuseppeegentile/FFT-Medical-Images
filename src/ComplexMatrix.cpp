@@ -81,3 +81,28 @@ void ComplexMatrix::addColMajor(const size_t col, ComplexArray vals){
         add(r, col, vals[r]);
     }
 }
+
+
+const void ComplexMatrix::print() const{
+    for(int i = 0; i < height; i++){
+        for(int j = 0; j < width; j++)
+            std::cout << storage[i * width + j] << ", ";
+        std::cout << std::endl;
+    }
+}
+
+const ComplexMatrix ComplexMatrix::magnitude(ComplexMatrix& other) const{
+    ComplexMatrix res(width, height);
+    for(int i = 0; i < height; i++){
+        for(int j = 0; j < width; j++)
+            res.add(i, j, std::hypot(this->get(i,j).real(), other.get(i, j).real()));
+    }
+}
+
+void ComplexMatrix::normalize(const Complex& val) {
+    for(int i = 0; i < getHeight(); i++){
+        for(int j = 0; i < getWidth(); j++){
+            storage[i * width + j] /= val;
+        }
+    }
+}
