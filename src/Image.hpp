@@ -83,7 +83,7 @@ class Image {
         void merge_2d(const std::vector<Image> &images);
 
 
-        Image& ctz_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
+        Image& ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
     private:
         size_t size;
         int w;

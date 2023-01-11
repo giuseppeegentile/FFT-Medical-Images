@@ -94,7 +94,6 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const do
 	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
 
 	//convolution
-
     MDFFT fft_img(pad_img);
     pad_img = fft_img.solveIterative();
     MDFFT fft_ker(pad_ker);
@@ -238,38 +237,70 @@ const void Image::anisotropic_diffusion(const Image& dest, const double dt, cons
 
 void Image::merge_2d(const std::vector<Image> &images) {
     const int img_size = images.size();
-    for(int img = 0; img < img_size; img++){
+    for(int img = 0; img < img_size / 2; img++){
         for(int i = 0; i < medical_img_size; i++){
             for(int j = 0; j < medical_img_size; j++){
                 for(uint8_t c = 0; c < getChannels(); c++){
-                    data[((i* getWidth() + j) * channels + c) + img * (getWidth() * getWidth() * getChannels())] = images[img].data[(i * getWidth() + j) * channels + c];
+                    data[((i* getWidth() + (img * medical_img_size) + j) * channels + c)] = images[img].data[(i * medical_img_size + j) * channels + c];
                 }
             }
         }
     }
+    const int offset = getWidth() * getHeight() *getChannels() / 2;
+    for(int img = img_size / 2, k = 1; img < img_size; img++, k++){
+        for(int i = 0; i < medical_img_size; i++){
+            for(int j = 0; j < medical_img_size; j++){
+                for(uint8_t c = 0; c < getChannels(); c++){
+                    data[((i* getWidth() + (img * medical_img_size) + j) * channels + c) + offset] = images[img].data[(i * medical_img_size + j) * channels + c];
+                }
+            }
+        }
+    }
+/*
+    for(int i = 0; i < medical_img_size; i++){
+        for(int j = 0; j < medical_img_size; j++){
+            for(uint8_t c = 0; c < getChannels(); c++){
+                data[((i* getWidth() + j) * channels + c) ] = images[0].data[(i * medical_img_size + j) * channels + c];
+            }
+        }
+    }
+
+    for(int i = 0; i < medical_img_size; i++){
+        for(int j = 0; j < medical_img_size; j++){
+            for(uint8_t c = 0; c < getChannels(); c++){
+                data[((i* getWidth() + medical_img_size + j) * channels + c)] = images[1].data[(i * medical_img_size + j) * channels + c];
+            }
+        }
+    }
+
+*/
 }
 
 
-Image& Image::ctz_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
+Image& Image::ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::Ctz;
 	//pad image
 	ComplexArray pad_img(w * h);
+    double start = omp_get_wtime();
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {
             //pad_img.add(i, j, std::complex<double>(data[(i * w + j)* channels + channel], 0));
             pad_img[i * getWidth() + j] = Complex(data[(i * w + j)* channels + channel], 0);
 		}
 	}
+    double end = omp_get_wtime();
+    std::cout << end - start << std::endl;
 
 	//pad kernel
 	/*ComplexMatrix pad_ker(w, h);
 	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);*/
 
 	//convolution
-
+    start = omp_get_wtime();
     Ctz fft_img(pad_img);
     pad_img = fft_img.solve(false);
-
+    end = omp_get_wtime();
+    std::cout << end - start << std::endl;
 
 	//update pixel data
     /*

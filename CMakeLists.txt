@@ -7,15 +7,19 @@ set(CMAKE_CXX_COMPILER "g++")
 project(FFT CXX)
 
 find_package(OpenMP REQUIRED)
-add_compile_options(-std=c++11 -Wall -fopenmp -g)
+add_compile_options(-std=c++11 -pg -Wall -fopenmp )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/images)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/medical_images/stanford)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/anisotropic)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/gaussed)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/kuwhara)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/NLMF)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/sobel)
 
 #add executable
-add_executable(FFT src/FFT.cpp  src/ComplexMatrix.cpp src/MDFFT.cpp  src/CSV_Reader.cpp src/Ctz.cpp src/Image.cpp  src/main2.cpp )
+add_executable(FFT src/FFT.cpp  src/ComplexMatrix.cpp src/MDFFT.cpp  src/CSV_Reader.cpp src/Ctz.cpp src/Image.cpp  src/main.cpp )
 
 target_link_libraries(FFT PUBLIC OpenMP::OpenMP_CXX)
 

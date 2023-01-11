@@ -28,10 +28,10 @@ namespace Solver{
             arr_row = output_data.getRow(r);
             FFT fft_iter(arr_row);
             fft_iter.solveIterative(false);
-            output_data.add(r, fft_iter.getOutput());
+            output_data.addColMajor(r, fft_iter.getOutput());
         }
         //again transpose
-        output_data = output_data.transpose();
+        //output_data = output_data.transpose();
         return output_data;
     }
 

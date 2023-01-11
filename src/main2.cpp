@@ -1,3 +1,4 @@
+
 #include "FFT.hpp"
 #include "CSV_Reader.hpp"
 #include "Image.hpp"
@@ -13,23 +14,29 @@ int main() {
 
 
     std::vector<Image> images;
-    //read and populate images vector
-    for(int i = 1; i < 100; i++){
-        std::string s = "../medical_images/stanford/cthead-8bit0" + std::to_string(i) + ".jpg";
-        Image img(Tools::getChar(s), 2);
-        images.push_back(img);
-    }
 
-    Image merge(images[0].getWidth(), 100 * images[0].getWidth(), images[0].getChannels());
-    merge.merge_2d(images);
-    merge.write("../src/att.jpg", ImageType::JPG);
-    
-    for(uint8_t c = 0; c < channel_num; c++){
-        //images[i] = images[i].fft_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
-        merge.ctz_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
+
+    std::vector<Image> tmp;
+    tmp.reserve(4);
+    for(int j = 1; j <= (1 + 3); j++){
+        std::string s = "../medical_images/stanford/cthead-8bit0" + std::to_string(j) + ".jpg";
+        Image img(Tools::getChar(s), 2);
+        tmp.push_back(img);
     }
-    
-    
+    Image merged(medical_img_size * 2,medical_img_size * 2, channel_num);
+    merged.merge_2d(tmp);
+    images.push_back(merged);
+
+    double s = omp_get_wtime();
+    #pragma omp parallel for schedule(dynamic, 2)
+    for(uint8_t c = 0; c < channel_num; c++){
+        images[0] = images[0].fft_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
+    }double e = omp_get_wtime();
+    std::cout << e-s << std::endl;
+
+    std::string out = "../processed_medical_images/gaussed/cthead-8bit0" + std::to_string(1000) + ".jpg";
+    images[0].write(Tools::getChar(out), ImageType::JPG);
+        
 
 
     return 0;

@@ -97,6 +97,7 @@ const ComplexMatrix ComplexMatrix::magnitude(ComplexMatrix& other) const{
         for(int j = 0; j < width; j++)
             res.add(i, j, std::hypot(this->get(i,j).real(), other.get(i, j).real()));
     }
+    return res;
 }
 
 void ComplexMatrix::normalize(const Complex& val) {

@@ -3,9 +3,6 @@
 
 #include "FFT_Traits.hpp"
 
-typedef std::complex<double> Complex;
-typedef std::valarray<Complex> ComplexArray;
-
 
 namespace Solver{
 
