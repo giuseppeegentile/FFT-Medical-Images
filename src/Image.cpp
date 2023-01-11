@@ -7,12 +7,9 @@
 #include "Image.hpp"
 
 
-
-
-
-
 bool Image::read(const char* filename, int channel_force) {
-	data = stbi_load(filename, &w, &h, &channels, channel_force);
+    int ch = (int)channels;
+	data = stbi_load(filename, &w, &h, &ch, channel_force);
 	channels = channel_force == 0 ? channels : channel_force;
 	return data != NULL;
 }
@@ -153,7 +150,7 @@ const Image& Image::sobel(){
     gx.write("../src/try_x.jpg", ImageType::JPG);
     gy.write("../src/try_y.jpg", ImageType::JPG);*/
     //compute the gradient
-    for(int i = 0; i < size; i++)
+    for(size_t i = 0; i < size; i++)
         data[i] = std::hypot(gx.getData()[i], gy.getData()[i]) / 8.0;
 
     return *this;
@@ -236,6 +233,59 @@ const void Image::anisotropic_diffusion(const Image& dest, const double dt, cons
 
     delete[] precal;
 }
+
+
+
+void Image::merge_2d(const std::vector<Image> &images) {
+    const int img_size = images.size();
+    for(int img = 0; img < img_size; img++){
+        for(int i = 0; i < medical_img_size; i++){
+            for(int j = 0; j < medical_img_size; j++){
+                for(uint8_t c = 0; c < getChannels(); c++){
+                    data[((i* getWidth() + j) * channels + c) + img * (getWidth() * getWidth() * getChannels())] = images[img].data[(i * getWidth() + j) * channels + c];
+                }
+            }
+        }
+    }
+}
+
+
+Image& Image::ctz_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
+    using Solver::Ctz;
+	//pad image
+	ComplexArray pad_img(w * h);
+	for(int i = 0; i < h; ++i) {
+		for(int j = 0; j < w; ++j) {
+            //pad_img.add(i, j, std::complex<double>(data[(i * w + j)* channels + channel], 0));
+            pad_img[i * getWidth() + j] = Complex(data[(i * w + j)* channels + channel], 0);
+		}
+	}
+
+	//pad kernel
+	/*ComplexMatrix pad_ker(w, h);
+	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);*/
+
+	//convolution
+
+    Ctz fft_img(pad_img);
+    pad_img = fft_img.solve(false);
+
+
+	//update pixel data
+    /*
+	for(int i = 0; i < h; ++i) {
+		for(int j = 0; j < w; ++j) {
+			data[(i * w + j) * channels + channel] = (uint8_t)(round(dot(i, j).real()) < 0 ? 0 : (round(dot(i, j).real()) > 255 ? 255 : round(dot(i, j).real())));
+            
+		}
+	}
+*/
+	return *this;
+}
+
+
+
+
 
 
 

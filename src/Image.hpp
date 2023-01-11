@@ -11,6 +11,7 @@
 #include "MDFFT.hpp"
 #include "CSV_Reader.hpp"
 #include "Filtering_traits.hpp"
+#include "Ctz.hpp"
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> ComplexArray;
 
@@ -65,7 +66,7 @@ class Image {
 
         inline const  int getWidth() const  {return w;} ;
         inline const int getHeight() const {return h;};
-        inline const int getChannels() const {return channels;};
+        inline const uint8_t getChannels() const {return channels;};
 
         Image& convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_height, double kernel[], uint32_t center_row, uint32_t center_col);
         Image& fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
@@ -77,11 +78,16 @@ class Image {
 
         //const void anisotropic_diffusion(Image& dst, int num_iterations, float k) const;
         const void anisotropic_diffusion(const Image& dest, const double dt, const int lambda, const int interations) const ;
-        const void anisotropic_diffusion(Image& dst, int num_iterations, float k) const ;
+        const void anisotropic_diffusion(Image& dst, int num_iterations, float k) const;
+
+        void merge_2d(const std::vector<Image> &images);
+
+
+        Image& ctz_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
     private:
         size_t size;
         int w;
         int h;
         uint8_t *data;
-        int channels;
+        uint8_t channels;
 };

@@ -5,8 +5,6 @@
 namespace Solver{
     using namespace Solver;
 
-
-
     ComplexArray
     FFT::recursiveAlgorithm(const  ComplexArray& input){
         const size_t N = input.size();

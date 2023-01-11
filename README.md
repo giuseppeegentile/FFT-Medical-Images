@@ -3,4 +3,10 @@
     One file per slice (total of 100 slices)
     Most intense noise in the 75-th, 76-th, 77-th images.
 
-    Aim to do: Gaussian, Kuwahara, NLMF filters to denoise.
+    Done:
+        - Gaussian filtering 
+        - Anisotropic diffusion 
+    To do:
+        - Kuwahara
+        - NLMF 
+        - Rebuild 3d volume 
