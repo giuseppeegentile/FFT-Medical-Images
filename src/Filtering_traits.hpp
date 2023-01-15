@@ -263,9 +263,33 @@ constexpr uint8_t channel_num = 2;
 
 constexpr int medical_img_size = 256;
 
+constexpr int kuwahara_kernel_size = 7;
 
+constexpr auto define_pad = [](const int kk_size) -> int {
+    for(int i = 0; i < kk_size; i++){
+        if( ! ((medical_img_size + i ) % kk_size)) return i;
+    }
+};
 
+constexpr int kuwahara_pad = define_pad(kuwahara_kernel_size);
 
+constexpr auto get_indexes = [](int center_indexes[]) -> int* {
+    /*
+    for(int i = kuwahara_kernel_size/2; i < borders; i++){
+        for(int j = kuwahara_kernel_size / 2; j < borders; j+=kuwahara_kernel_size){
+            center_indexes[(i -  kuwahara_kernel_size/2) * borders + j -  kuwahara_kernel_size/2] = (kuwahara_kernel_size / 2) * (medical_img_size + kuwahara_pad) + j+ kuwahara_kernel_size / 2;            
+        }
+    }
+    return center_indexes;*/
+    const int borders =  (medical_img_size + kuwahara_pad) / kuwahara_kernel_size;
+    for(int i = 0; i < borders; i++){
+        for(int j = 0, k = kuwahara_kernel_size / 2; j < borders; j++, k += kuwahara_kernel_size){
+            center_indexes[i * borders + j] = (i + kuwahara_kernel_size / 2) * medical_img_size + k;
+        }
+        if(borders - 1 == i) std::cout << (borders-1) * (borders-1) + (borders-1) << std::endl;
+    }
+    return center_indexes;
+};
 
 
 

@@ -56,7 +56,7 @@ Image& Image::convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_h
                 sum += kernel[center_index + j * (long)kernel_width + k] * data[(row * w + col) * channels + channel];
             }
         }
-        updated[i / channels] = (uint8_t)(std::round(sum) < 0.0 ? 0 : (std::round(sum) > 255.0 ? 255 : std::round(sum)));
+        updated[i / channels] = convert_to_pixel(sum);
     }
     for(uint64_t i = channel; i < size; i += channels){
         data[i] = updated[i / channels];
@@ -107,7 +107,7 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const do
 	//update pixel data
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {
-			data[(i * w + j) * channels + channel] = (uint8_t)(round(dot(i, j).real()) < 0 ? 0 : (round(dot(i, j).real()) > 255 ? 255 : round(dot(i, j).real())));
+			data[(i * w + j) * channels + channel] = convert_to_pixel(dot(i,j).real());
             //data[(i*w+j)*channels+channel] = (uint8_t)(std::round(dot(i, j).real())); //versione psichedelica
 		}
 	}
@@ -126,14 +126,11 @@ void Image::diff(Image& img) {
         for(int j = 0; j < min_width; j++){
             for(int c = 0; c < min_channels; c++){
                 uint8_t diff = (uint8_t)std::abs(data[(i * w + j) * channels + c] - img.data[(i * img.w + j) * img.channels + c]);
-                data[(i * w + j) * channels + c] = (uint8_t)(round(diff) < 0 ? 0 : (diff) > 255 ? 255 : round(diff));
+                data[(i * w + j) * channels + c] = convert_to_pixel(diff);
             }
         }
     }
-
 }
-
-
 
 const Image& Image::sobel(){
     Image cpy_x(*this);
@@ -158,7 +155,6 @@ const Image& Image::sobel(){
 
 //Perona - Malik equation to calculate the new intensity of each pixels
 //k: sensitivity of the filter
-
 const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k) const {
     Image g_norm(*this);
     
@@ -314,11 +310,98 @@ Image& Image::ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, co
 	return *this;
 }
 
+const void Image::pad_for_kuwahara(const Image& res) const{
+    for(int ch = 0; ch < channel_num; ch++){
+        for(int i = 0; i < kuwahara_pad / 2; i++){
+            for(int j = 0; j < res.getWidth(); j++){
+                res.data[(i * res.getWidth() + j)*channels + ch] = 0.;
+            }
+        }
+        for(int i = kuwahara_pad / 2; i < medical_img_size + kuwahara_pad / 2; i++){
+            for(int j = 0; j < kuwahara_pad / 2; j++){
+                res.data[(i * res.getWidth() + j)*channels + ch] = 0.;
+            }
+            for(int j = medical_img_size + kuwahara_pad / 2; j < medical_img_size + kuwahara_pad; j++){
+                res.data[(i * res.getWidth() + j)*channels + ch] = 0.;
+            }
+        }
+        for(int i = medical_img_size + kuwahara_pad / 2; i < res.getHeight(); i++) {
+            for(int j = 0; j < res.getWidth(); j++){
+                res.data[(i * res.getWidth() + j)*channels + ch] = 0.;
+            }
+        }
+        for(int i = kuwahara_pad / 2; i < medical_img_size + kuwahara_pad / 2; i++){
+            for(int j = kuwahara_pad / 2; j < medical_img_size + kuwahara_pad / 2; j++){
+                res.data[(i * res.getWidth() + j)*channels + ch] = data[((i - kuwahara_pad / 2) * getWidth() + j - kuwahara_pad / 2)*channels + ch];
+            }
+        }
+    }
+}
+
+//-fast-math, try with it
+const void Image::kuwahara(const Image& res, const int ch) const {
+    //i want the min standard dev, so take the biggest possible value at the starting point
+    double min_avg = 255.;
+    double min_dev = std::numeric_limits<double>::max();
+    int min_row = 0;
+    int min_col = 0;
+
+    for(int row = 0; row < getHeight(); row += kuwahara_kernel_size){  
+        for (int col = 0; col < getWidth(); col += kuwahara_kernel_size){
+            double sum = 0.0;
+            //for every row in the divided image of kernel size, sum the row
+            for(int i = row; i < row + kuwahara_kernel_size; i++){
+                for(int j = col; j < col + kuwahara_kernel_size; j++){
+                    sum += data[(i * getWidth() + j) * channels + ch];
+                }
+            }
+            const double avg = sum / (double)(kuwahara_kernel_size * kuwahara_kernel_size);
+            double dev = 0.0;                
+            for(int i = row; i < row + kuwahara_kernel_size; i++){
+                for(int j = col; j < col + kuwahara_kernel_size; j++){
+                    const double tmp =(data[(i * getWidth() + j)*channels  + ch ] - avg) ;
+                    dev += tmp * tmp;
+                }    
+            }
+            dev /= (kuwahara_kernel_size * kuwahara_kernel_size);
+            dev = std::sqrt(dev);
+            if(dev < min_dev){
+                min_dev = dev;
+                min_avg = avg;
+                min_row = row;
+                min_col = col;
+            }
+        }
+    }
+
+    for(int i = min_row + kuwahara_kernel_size/2; i < min_row + kuwahara_kernel_size; i++){
+        for(int j = min_col + kuwahara_kernel_size/2; j < min_col + kuwahara_kernel_size; j++){
+            res.data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(min_avg);
+        }
+    }
+    
+    /*const int num_blocks = getWidth() / (kuwahara_kernel_size);
+
+    for(int i = kuwahara_kernel_size / 2, m = 0; m < num_blocks; m++, i += kuwahara_kernel_size){
+        for(int j = kuwahara_kernel_size / 2, k = 0; k < num_blocks; k++, j += kuwahara_kernel_size){
+            res.data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(avg);
+        }
+    }*/
+}
 
 
-
-
+void Image::crop_to_center(const int width, const int height, const Image& res){
+    for(int ch = 0; ch < channel_num; ch++){
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                res.data[(i * width + j) * channels + ch] = data[((i + kuwahara_kernel_size / 2) * getWidth() + j+ kuwahara_kernel_size / 2) * channels + ch];
+            }
+        }
+    }
+    
+}
 
 
 #endif
 #endif
+

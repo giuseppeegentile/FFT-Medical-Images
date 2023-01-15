@@ -4,7 +4,9 @@
 #include <omp.h>
 #include <iostream>
 #include <string.h>
+#include <numeric>
 
+#include "Imaging_Traits.hpp"
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include "ComplexMatrix.hpp"
@@ -20,7 +22,6 @@ enum class ImageType {
 };
 class Image {
     public:        
-
         Image(const char* filename, int channel_force = 3) {
             if(read(filename, channel_force)) {
                 std::cout << "Reading correctly the image " << filename << std::endl;
@@ -37,7 +38,7 @@ class Image {
 
         Image& operator=(const Image& other)  {
             if (this == &other) return *this;
-    
+            //if(data) delete[] data;
             size = other.getSize();
             data = new uint8_t[size];
             w = other.getWidth();
@@ -53,8 +54,8 @@ class Image {
         }
 
         ~Image() {
-            delete[] data;
-            data = NULL;
+            if(data) delete[] data;
+           // data = NULL;
         }
 
 
@@ -82,8 +83,12 @@ class Image {
 
         void merge_2d(const std::vector<Image> &images);
 
-
         Image& ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
+
+        const void pad_for_kuwahara(const Image& res) const;
+        const void kuwahara(const Image& res, const int ch) const;
+
+        void crop_to_center(const int width, const int height, const Image& res);
     private:
         size_t size;
         int w;

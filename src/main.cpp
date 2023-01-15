@@ -18,8 +18,20 @@ int main() {
         Image img(Tools::getChar(s), 2);
         images.push_back(img);
     }
+    Image kuw(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num);
+    images[75].pad_for_kuwahara(kuw);
+    kuw.kuwahara(kuw, 0);
+    kuw.kuwahara(kuw, 1);/*
+    kuw.kuwahara(kuw, 0);
+    kuw.kuwahara(kuw, 1);*/
+    Image crop(medical_img_size, medical_img_size, channel_num);
+    kuw.crop_to_center(medical_img_size, medical_img_size, crop);
+    crop.write("../src/kuw.jpg", ImageType::JPG);
 
+    images[75].diff(crop);
+    images[75].write("../src/dif.jpg", ImageType::JPG);
 
+/*
     omp_set_nested(1);
     double start = omp_get_wtime();
     //#pragma omp parallel for schedule(dynamic, 2)
@@ -54,12 +66,7 @@ int main() {
     std::cout << "_________________________________________________________________________________________" << std::endl;
 
 
-
-
-
-
-
-
+*/
 
     return 0;
 }

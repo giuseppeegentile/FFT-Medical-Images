@@ -6,7 +6,9 @@
     Done:
         - Gaussian filtering 
         - Anisotropic diffusion 
-    To do:
         - Kuwahara
-        - NLMF 
+    To do:
+        - use unique_ptr instead of raw pointer
+        - rewrite clear tests and main
+        - use FFT 1D instead of 2D for convolution
         - Rebuild 3d volume 
