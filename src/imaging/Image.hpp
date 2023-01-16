@@ -13,7 +13,7 @@
 #include "../traits/Filtering_traits.hpp"
 #include "../solvers/Ctz.hpp"
 #include "../solvers/MDFFT.hpp"
-
+#include <memory>
 
 enum class ImageType {
     PNG, JPG, BMP, TGA
@@ -31,37 +31,36 @@ class Image {
 
         Image(int w_, int h_, int channels_) : w(w_), h(h_), channels(channels_){
             size = w * h * channels;
-            data = new uint8_t[size];
+            data = std::make_unique<uint8_t[]>(size);
         }
 
-        Image& operator=(const Image& other)  {
+        Image(const Image& img) : w(img.getWidth()), h(img.getHeight()), channels(img.getChannels()), size(img.getSize()), data(std::make_unique<uint8_t[]>(img.getSize())) {
+            std::copy_n(img.data.get(), img.getSize(), data.get());
+        }
+
+        Image& operator=(const Image& other) {
             if (this == &other) return *this;
-            //if(data) delete[] data;
-            size = other.getSize();
-            data = new uint8_t[size];
+            data = std::make_unique<uint8_t[]>(other.getSize());
             w = other.getWidth();
-            h = other.getHeight(); 
+            h = other.getHeight();
             channels = other.getChannels();
-            
-            std::copy(other.getData(), other.getData() + other.getSize(), data);
+            size = other.getSize();
+            std::copy_n(other.data.get(), other.getSize(), data.get());
             return *this;
         }
 
-        Image(const Image& img)  {
-            *this = img;
-        }
-
-        ~Image() {
-            if(data) delete[] data;
-           // data = NULL;
-        }
+        /*~Image() {
+            if (data) {
+                stbi_image_free(data.get());
+            }
+        }*/
 
 
         bool read(const char* filename, int channel_force = 0);
         bool write(const char* filename, ImageType type);
         
         inline const size_t getSize() const {return size; };
-        inline uint8_t* getData() const {return data;};
+        
 
         inline const  int getWidth() const  {return w;} ;
         inline const int getHeight() const {return h;};
@@ -75,8 +74,7 @@ class Image {
 
         const Image& sobel();
 
-        //const void anisotropic_diffusion(Image& dst, int num_iterations, float k) const;
-        const void anisotropic_diffusion(const Image& dest, const double dt, const int lambda, const int interations) const ;
+        
         const void anisotropic_diffusion(Image& dst, int num_iterations, float k) const;
 
         void merge_2d(const std::vector<Image> &images);
@@ -88,9 +86,9 @@ class Image {
 
         void crop_to_center(const int width, const int height, const Image& res);
     private:
-        size_t size;
         int w;
         int h;
-        uint8_t *data;
         uint8_t channels;
+        size_t size;
+        std::unique_ptr<uint8_t[]> data;
 };

@@ -7,7 +7,7 @@ set(CMAKE_CXX_COMPILER "g++")
 project(FFT CXX)
 
 find_package(OpenMP REQUIRED)
-add_compile_options(-std=c++17 -g -pg -Wall -fopenmp )
+add_compile_options(-std=c++17 -g -pg  -Wall -fopenmp )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/csv)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/images)

@@ -12,6 +12,7 @@
 #include <cmath>
 #include <valarray>
 #include "../types/MyComplexArray.hpp"
+
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> ComplexArray;
 constexpr auto epsilon = std::numeric_limits<double>::epsilon();

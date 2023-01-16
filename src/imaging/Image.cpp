@@ -9,7 +9,8 @@
 
 bool Image::read(const char* filename, int channel_force) {
     int ch = (int)channels;
-	data = stbi_load(filename, &w, &h, &ch, channel_force);
+	size = w * h * ch;
+    data.reset(stbi_load(filename, &w, &h, &ch, channel_force));
 	channels = channel_force == 0 ? channels : channel_force;
 	return data != NULL;
 }
@@ -18,16 +19,16 @@ bool Image::write(const char* filename, ImageType type) {
 	int success;
     switch (type) {
         case ImageType::PNG:
-        success = stbi_write_png(filename, w, h, channels, data, w*channels);
+        success = stbi_write_png(filename, w, h, channels, data.get(), w*channels);
         break;
         case ImageType::BMP:
-        success = stbi_write_bmp(filename, w, h, channels, data);
+        success = stbi_write_bmp(filename, w, h, channels, data.get());
         break;
         case ImageType::JPG:
-        success = stbi_write_jpg(filename, w, h, channels, data, 100);
+        success = stbi_write_jpg(filename, w, h, channels, data.get(), 100);
         break;
         case ImageType::TGA:
-        success = stbi_write_tga(filename, w, h, channels, data);
+        success = stbi_write_tga(filename, w, h, channels, data.get());
         break;
     }
     if(success != 0) {
@@ -151,7 +152,7 @@ const Image& Image::sobel(){
     gy.write("../src/try_y.jpg", ImageType::JPG);*/
     //compute the gradient
     for(size_t i = 0; i < size; i++)
-        data[i] = std::hypot(gx.getData()[i], gy.getData()[i]) / 8.0;
+        data[i] = std::hypot(gx.data[i], gy.data[i]) / 8.0;
 
     return *this;
 
@@ -191,49 +192,6 @@ const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k)
     }
 
 }
-
-
-const void Image::anisotropic_diffusion(const Image& dest, const double dt, const int lambda, const int interations) const  {
-    //Make temp image
-    Image temp(*this);
-    //temp.sobel();
-    //Precalculate tables (for speed up)
-    double* precal = new double[255];
-    double lambda2 = lambda * lambda;
-    for (int f = 0; f < 255; f++) {
-        precal[f] = -dt * f * lambda2 / (lambda2 + f * f);
-    }
-
-    //Apply the filter
-    for(int ch = 0; ch <= channels; ch++){
-        for (int n = 0; n < interations; n++)
-        {
-        
-            for (int i = 0; i < h; i++)
-                for (int j = 0; j < w; j++) {
-                    
-                    const double current =  temp.data[(i * getWidth() + j) * channels + ch];
-
-                    const int px = (j - 1) < 0 ? 0 : ( j - 1);
-                    const int nx = (j + 1) >= j ? j - 1 : j + 1;
-                    const int py = (i - 1) < 0 ? 0 : i - 1;
-                    const int ny = (i + 1) >= i ? i - 1: i + 1;
-
-                    dest.data[(i * getWidth() + j) * channels + ch] = uint8_t
-                                        ((precal[(int)(current - temp.data[(i * getWidth() + px) * channels + ch])] +
-                                        precal[(int)(current - temp.data[(i * getWidth() + nx) * channels + ch])] +
-                                        precal[(int)(current - temp.data[(py * getWidth() + j) * channels + ch])]  +
-                                        precal[(int)(current - temp.data[(ny * getWidth() + j) * channels + ch])] )+
-                                        temp.data[(i * getWidth() + j) * channels + ch]);
-
-                }
-            }
-    }
-
-    delete[] precal;
-}
-
-
 
 void Image::merge_2d(const std::vector<Image> &images) {
     const int img_size = images.size();

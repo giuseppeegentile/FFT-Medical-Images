@@ -8,7 +8,7 @@
         - Anisotropic diffusion 
         - Kuwahara
     To do:
-        - use unique_ptr instead of raw pointer
-        - rewrite clear tests and main
-        - use FFT 1D instead of 2D for convolution
+        - Rewrite clear tests and main
         - Rebuild 3d volume 
+        - Doc
+        - Report pdf

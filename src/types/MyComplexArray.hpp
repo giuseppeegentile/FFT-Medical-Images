@@ -21,22 +21,8 @@ class MyComplexArray : public ComplexArray {
         // Copy constructor
         MyComplexArray(const MyComplexArray& other) : ComplexArray(other) {}
 
-        operator ComplexArray() const { return ComplexArray(*this); }
+        //operator ComplexArray() const { return ComplexArray(*this); }
 
-        void operator*=(const MyComplexArray& other) {
-            for(size_t i = 0; i< this->size(); i++){
-                (*this)[i] = Complex(((*this)[i].real() * other[i].real()), ((*this)[i].imag() * other[i].imag()));
-            }
-        }
-
-
-        MyComplexArray& operator*(const MyComplexArray& other) {
-            MyComplexArray ret(other.size());
-            for(size_t i = 0; i< this->size(); i++){
-                ret[i] = Complex(((*this)[i].real() * other[i].real()), ((*this)[i].imag() * other[i].imag()));
-            }
-            return ret;
-        }
 
         MyComplexArray& apply() {
             for (size_t i = 0; i < this->size(); i++) {
