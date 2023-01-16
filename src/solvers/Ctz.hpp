@@ -1,5 +1,5 @@
-#include "FFT_Traits.hpp"
-#include "FFT.hpp"
+#include "../traits/FFT_Traits.hpp"
+#include "../solvers/FFT.hpp"
 #include <algorithm>
 
 namespace Solver{

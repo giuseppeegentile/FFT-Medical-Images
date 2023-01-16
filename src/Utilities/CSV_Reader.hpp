@@ -13,7 +13,7 @@
 #include <valarray>
 
 #pragma once
-#include "FFT_Traits.hpp"
+#include "../traits/FFT_Traits.hpp"
 
 namespace Utility {
     typedef std::vector<std::vector<std::string>> Table;

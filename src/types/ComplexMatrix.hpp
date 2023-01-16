@@ -3,7 +3,7 @@
 #include <vector>
 #include <valarray>
 #pragma once
-#include "FFT_Traits.hpp"
+#include "../traits/FFT_Traits.hpp"
 
 class ComplexMatrix {
     public:

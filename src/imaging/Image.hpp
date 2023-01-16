@@ -6,14 +6,13 @@
 #include <string.h>
 #include <numeric>
 
-#include "Imaging_Traits.hpp"
-#include "stb_image.h"
-#include "stb_image_write.h"
-#include "ComplexMatrix.hpp"
-#include "CSV_Reader.hpp"
-#include "Filtering_traits.hpp"
-#include "Ctz.hpp"
-#include "MDFFT.hpp"
+#include "../traits/Imaging_Traits.hpp"
+#include "../library/stb_image.h"
+#include "../library/stb_image_write.h"
+#include "../types/ComplexMatrix.hpp"
+#include "../traits/Filtering_traits.hpp"
+#include "../solvers/Ctz.hpp"
+#include "../solvers/MDFFT.hpp"
 
 
 enum class ImageType {

@@ -1,34 +1,13 @@
-#include "FFT.hpp"
-#include "CSV_Reader.hpp"
-#include "Image.hpp"
-#include "Parallel_configuration.hpp"
-#include "Utilities.hpp"
-#include "CSV_Reader.hpp"
+#include "solvers/FFT.hpp"
+#include "Utilities/CSV_Reader.hpp"
+#include "imaging/Image.hpp"
+#include "traits/Parallel_configuration.hpp"
+#include "Utilities/Utilities.hpp"
+
 int main() {
     using Solver::FFT;
-    omp_set_nested(1);
+    omp_set_nested(nesting);
     omp_set_num_threads(n_threads);
-
-    MyComplexArray input;
-    Utility::File       file("../csv/sus.csv");
-    Utility::CSV_Reader reader(file);
-    const size_t size = reader.getArraySize();
-    input = reader.getArray();
-
-
-    FFT sol(input);
-    sol.solveIterative(true);
-    MyComplexArray solu  = sol.getOutput();
-
-    input *= solu;
-
-
-    Utility::OutputFile of;
-    of.open("../csv/A.csv");
-    for(size_t i = 0; i < input.size(); i++){
-        of << input[i].real() << "," << input[i].imag() << "\n";
-    }
-    of.close();
 
 
 

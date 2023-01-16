@@ -1,7 +1,7 @@
 #ifndef HH_SOLVERFFFT_HH
 #define HH_SOLVERFFFT_HH
 
-#include "FFT_Traits.hpp"
+#include "../traits/FFT_Traits.hpp"
 
 namespace Solver{
 

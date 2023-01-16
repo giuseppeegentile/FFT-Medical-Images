@@ -5,7 +5,7 @@
 #include <valarray>
 #include <omp.h>
 
-#include "ComplexMatrix.hpp"
+#include "../types/ComplexMatrix.hpp"
 
 typedef std::complex<double> Complex;
 typedef std::valarray<Complex> ComplexArray;

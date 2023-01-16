@@ -19,7 +19,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/NLMF)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processed_medical_images/sobel)
 
 #add executable
-add_executable(FFT src/FFT.cpp  src/ComplexMatrix.cpp src/MDFFT.cpp src/CSV_Reader.cpp src/Ctz.cpp src/Image.cpp  src/main.cpp )
+add_executable(FFT src/solvers/FFT.cpp  src/types/ComplexMatrix.cpp src/solvers/MDFFT.cpp src/Utilities/CSV_Reader.cpp src/solvers/Ctz.cpp src/imaging/Image.cpp  src/main.cpp )
 
 target_link_libraries(FFT PUBLIC OpenMP::OpenMP_CXX)
 
