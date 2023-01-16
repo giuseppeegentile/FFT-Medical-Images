@@ -3,12 +3,33 @@
 #include "Image.hpp"
 #include "Parallel_configuration.hpp"
 #include "Utilities.hpp"
-
+#include "CSV_Reader.hpp"
 int main() {
-    using Solver::MDFFT;
     using Solver::FFT;
     omp_set_nested(1);
     omp_set_num_threads(n_threads);
+
+    MyComplexArray input;
+    Utility::File       file("../csv/sus.csv");
+    Utility::CSV_Reader reader(file);
+    const size_t size = reader.getArraySize();
+    input = reader.getArray();
+
+
+    FFT sol(input);
+    sol.solveIterative(true);
+    MyComplexArray solu  = sol.getOutput();
+
+    input *= solu;
+
+
+    Utility::OutputFile of;
+    of.open("../csv/A.csv");
+    for(size_t i = 0; i < input.size(); i++){
+        of << input[i].real() << "," << input[i].imag() << "\n";
+    }
+    of.close();
+
 
 
     std::vector<Image> images;
@@ -18,40 +39,23 @@ int main() {
         Image img(Tools::getChar(s), 2);
         images.push_back(img);
     }
-    Image kuw(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num);
-    images[75].pad_for_kuwahara(kuw);
-    kuw.kuwahara(kuw, 0);
-    kuw.kuwahara(kuw, 1);/*
-    kuw.kuwahara(kuw, 0);
-    kuw.kuwahara(kuw, 1);*/
-    Image crop(medical_img_size, medical_img_size, channel_num);
-    kuw.crop_to_center(medical_img_size, medical_img_size, crop);
-    crop.write("../src/kuw.jpg", ImageType::JPG);
 
-    images[75].diff(crop);
-    images[75].write("../src/dif.jpg", ImageType::JPG);
 
-/*
     omp_set_nested(1);
     double start = omp_get_wtime();
     //#pragma omp parallel for schedule(dynamic, 2)
-    for(int i = 0; i < 99; i++){
-        //if(i == 75){
-        //    Image test_sob(c);
-        //    test_sob.sobel();
-        //    test_sob.write("../src/sob.jpg", ImageType::JPG);
-        //}
+    for(int i = 1; i < 5; i++){
         #pragma omp parallel for schedule(dynamic, 2)
         for(uint8_t c = 0; c < channel_num; c++){
-            images[i] = images[i].fft_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
+            images[i - 1] = images[i - 1].fft_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
         }
-        std::cout << "Convolved "<< i<<  std::endl;    
+        std::cout << "Convolved "<< i <<  std::endl;    
     }
     double end = omp_get_wtime();
     std::cout << "Time taken by fft convolution: "<< end - start << std::endl;
     for(int i = 1; i < 100; i++){
         std::string out = "../processed_medical_images/gaussed/cthead-8bit0" + std::to_string(i) + ".jpg";
-        images[i].write(Tools::getChar(out), ImageType::JPG);
+        images[i - 1].write(Tools::getChar(out), ImageType::JPG);
     }
 
     //Image test("../medical_images/stanford/cthead-8bit075.jpg");
@@ -66,7 +70,7 @@ int main() {
     std::cout << "_________________________________________________________________________________________" << std::endl;
 
 
-*/
+
 
     return 0;
 }

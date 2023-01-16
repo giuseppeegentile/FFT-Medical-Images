@@ -6,17 +6,7 @@
 #include "ComplexMatrix.hpp"
 
 
-
-/*
-ComplexMatrix::ComplexMatrix(const ComplexMatrix& mat){
-    for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++){
-            storage[i * width + j] = mat.storage[i * width + j];
-        }
-    }
-}*/
-
-void ComplexMatrix::add(const size_t row, ComplexArray vals){
+void ComplexMatrix::add(const size_t row, MyComplexArray vals){
     for(size_t i = 0;  i < width; i++)
         storage[row * width + i] = vals[i];
 }
@@ -25,21 +15,17 @@ void ComplexMatrix::add(const size_t row,const size_t col, Complex val){
     storage[row * width + col] = val;
 }
 
-ComplexArray ComplexMatrix::getRow(const size_t row){
-    ComplexArray ret;
+MyComplexArray ComplexMatrix::getRow(const size_t row){
+    MyComplexArray ret;
     ret.resize(width);
     for(size_t i = 0;  i < width; i++)
         ret[i] = storage[row * width + i];
     return ret;
 }
-
-
-
 /*
 ComplexMatrix::~ComplexMatrix() {
     free(&storage);
 }*/
-
 
 ComplexMatrix ComplexMatrix::transpose() {
     ComplexMatrix ret_matrix(width, height);
@@ -66,7 +52,7 @@ ComplexMatrix ComplexMatrix::transpose() {
 void ComplexMatrix::dotProduct(ComplexMatrix kernel, ComplexMatrix& res ) {
     for(size_t i = 0; i < height; i++){
         for(size_t j = 0; j < width; j++){
-            res.add(i, j, (storage[i * width + j]) * kernel(i, j));
+            res.add(i, j, kernel(i,j) * (*this)(i,j));
         }
     }
 }
@@ -76,7 +62,7 @@ const size_t ComplexMatrix::getWidth() const { return width; }
 const size_t ComplexMatrix::getHeight() const {return height; }
 
 
-void ComplexMatrix::addColMajor(const size_t col, ComplexArray vals){
+void ComplexMatrix::addColMajor(const size_t col, MyComplexArray vals){
     for(size_t r = 0; r < height; r++){
         add(r, col, vals[r]);
     }
@@ -84,8 +70,8 @@ void ComplexMatrix::addColMajor(const size_t col, ComplexArray vals){
 
 
 const void ComplexMatrix::print() const{
-    for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++)
+    for(size_t i = 0; i < height; i++){
+        for(size_t j = 0; j < width; j++)
             std::cout << storage[i * width + j] << ", ";
         std::cout << std::endl;
     }
@@ -93,16 +79,16 @@ const void ComplexMatrix::print() const{
 
 const ComplexMatrix ComplexMatrix::magnitude(ComplexMatrix& other) const{
     ComplexMatrix res(width, height);
-    for(int i = 0; i < height; i++){
-        for(int j = 0; j < width; j++)
+    for(size_t i = 0; i < height; i++){
+        for(size_t j = 0; j < width; j++)
             res.add(i, j, std::hypot(this->get(i,j).real(), other.get(i, j).real()));
     }
     return res;
 }
 
 void ComplexMatrix::normalize(const Complex& val) {
-    for(int i = 0; i < getHeight(); i++){
-        for(int j = 0; i < getWidth(); j++){
+    for(size_t i = 0; i < getHeight(); i++){
+        for(size_t j = 0; i < getWidth(); j++){
             storage[i * width + j] /= val;
         }
     }

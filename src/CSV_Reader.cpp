@@ -59,9 +59,9 @@ namespace Utility{
         return std::stoi(table.at(0).at(0));
     }
 
-    const ComplexArray 
+    const MyComplexArray 
     CSV_Reader::getArray() const {
-        ComplexArray input;
+        MyComplexArray input;
 
         const int size = std::stoi(table.at(0).at(0));
         input.resize(size);
@@ -71,18 +71,4 @@ namespace Utility{
         return input;
     }
 
-    ComplexMatrix
-    CSV_Reader::getMatrix() {
-        CSV_Reader::readCSV();
-        const size_t row = std::stoi(table.at(0).at(0));
-        const size_t col = std::stoi(table.at(0).at(1));
-        ComplexMatrix input(row, col);
-        for(size_t i = 0; i < row; i++){
-            for(size_t j = 0, h = 0; j < col; j++, h++){
-                input.add(i,j, std::complex<double>(std::stod(table.at(i + 1).at(h)), std::stod(table.at(i + 1).at(h + 1))));
-                h++;
-            }
-        }
-        return input;
-    }
 }

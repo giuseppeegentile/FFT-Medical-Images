@@ -3,8 +3,7 @@
 #include <vector>
 #include <valarray>
 #pragma once
-typedef std::complex<double> Complex;
-typedef std::valarray<Complex> ComplexArray;
+#include "FFT_Traits.hpp"
 
 class ComplexMatrix {
     public:
@@ -20,13 +19,13 @@ class ComplexMatrix {
 
         inline  const Complex get(const size_t row, const size_t column) const { return storage[row * width + column];}
 
-        void add(const size_t row, ComplexArray vals);
+        void add(const size_t row, MyComplexArray vals);
 
-        void addColMajor(const size_t row, ComplexArray vals);
+        void addColMajor(const size_t row, MyComplexArray vals);
 
         void add(const size_t row,const size_t col, Complex val);
 
-        ComplexArray getRow(const size_t row);
+        MyComplexArray getRow(const size_t row);
 
         const size_t getWidth() const ;
 
@@ -34,7 +33,7 @@ class ComplexMatrix {
 
         ComplexMatrix transpose();
 
-        inline const ComplexArray getStorage() const {return storage;};
+        inline const MyComplexArray getStorage() const {return storage;};
         
         const void print() const;
 
@@ -45,7 +44,7 @@ class ComplexMatrix {
         void normalize(const Complex& val);
 
     private:
-        ComplexArray storage;
+        MyComplexArray storage;
         size_t width;
         size_t height;
 };

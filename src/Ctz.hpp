@@ -7,16 +7,16 @@ namespace Solver{
     class Ctz{
 
         public:
-            Ctz(const ComplexArray &input_data_):input_data(input_data_) {}
+            Ctz(const MyComplexArray &input_data_):input_data(input_data_) {}
 
 
-            const ComplexArray solve(bool inverse) const;
+            const MyComplexArray solve(bool inverse) const;
 
             
         private:
             //array storing the input
-            ComplexArray input_data;
-            const ComplexArray convolve( ComplexArray& xvector,  ComplexArray& yvector) const;
+            MyComplexArray input_data;
+            const MyComplexArray convolve( MyComplexArray& xvector,  MyComplexArray& yvector) const;
             const int nearestPowerOf2(int n) const;
     };
 }

@@ -74,10 +74,11 @@ const void Image::padKernel(size_t ker_width, size_t ker_height, const double ke
 		for(long j = -((long)center_col); j<(long)ker_width - center_col; ++j) {
 			uint32_t c = (j < 0) ? j + pad_width : j;
             pad_ker.add(r, c, std::complex<double>(ker[(i + center_row) * ker_width + (j + center_col)], 0));
+            //pad_ker[r * w + c] = Complex(ker[(i + center_row) * ker_width + (j + center_col)], 0);
+
 		}
 	}
 }
-
 
 Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::MDFFT;
@@ -85,10 +86,10 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const do
 	ComplexMatrix pad_img(w, h);
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {
-            pad_img.add(i, j, std::complex<double>(data[(i * w + j)* channels + channel], 0));
+            //pad_img[(i * w + j)] = (Complex(data[(i * w + j) * channels + channel], 0));
+            pad_img.add(i, j, Complex(data[(i * w + j) * channels + channel], 0));
 		}
 	}
-
 	//pad kernel
 	ComplexMatrix pad_ker(w, h);
 	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
@@ -96,18 +97,21 @@ Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const do
 	//convolution
     MDFFT fft_img(pad_img);
     pad_img = fft_img.solveIterative();
+    
     MDFFT fft_ker(pad_ker);
     pad_ker = fft_ker.solveIterative();
+
     ComplexMatrix dot(w, h);
     pad_img.dotProduct(pad_ker, dot);
+
     MDFFT inv(dot);
-    dot = inv.getInverse();
+    ComplexMatrix out = inv.getInverse();
 
 
 	//update pixel data
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {
-			data[(i * w + j) * channels + channel] = convert_to_pixel(dot(i,j).real());
+			data[(i * w + j) * channels + channel] = convert_to_pixel(out(i, j).real());
             //data[(i*w+j)*channels+channel] = (uint8_t)(std::round(dot(i, j).real())); //versione psichedelica
 		}
 	}
@@ -276,7 +280,7 @@ void Image::merge_2d(const std::vector<Image> &images) {
 Image& Image::ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::Ctz;
 	//pad image
-	ComplexArray pad_img(w * h);
+	MyComplexArray pad_img(w * h);
     double start = omp_get_wtime();
 	for(int i = 0; i < h; ++i) {
 		for(int j = 0; j < w; ++j) {

@@ -10,12 +10,11 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include "ComplexMatrix.hpp"
-#include "MDFFT.hpp"
 #include "CSV_Reader.hpp"
 #include "Filtering_traits.hpp"
 #include "Ctz.hpp"
-typedef std::complex<double> Complex;
-typedef std::valarray<Complex> ComplexArray;
+#include "MDFFT.hpp"
+
 
 enum class ImageType {
     PNG, JPG, BMP, TGA

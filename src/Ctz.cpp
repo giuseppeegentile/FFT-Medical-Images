@@ -15,12 +15,12 @@ namespace Solver{
     }
 
 
-    const  ComplexArray Ctz::solve(bool inverse) const {
+    const  MyComplexArray Ctz::solve(bool inverse) const {
         const int n = input_data.size();
         const int m =  nearestPowerOf2(2 * n +1);
 
         // Trignometric table
-        ComplexArray omegas(n);
+        MyComplexArray omegas(n);
         const double coef = M_PI / n * (inverse ? 1 : -1);
         #pragma omp parallel for schedule(dynamic, 2)
         for (int i = 0; i < n; i++) {
@@ -29,8 +29,8 @@ namespace Solver{
         }
 
         // Temporary vectors and preprocessing
-        ComplexArray a(m);
-        ComplexArray b(m);
+        MyComplexArray a(m);
+        MyComplexArray b(m);
         
         #pragma omp parallel for schedule(dynamic, 2)
         for (int i = 0; i < n; i++)
@@ -42,14 +42,14 @@ namespace Solver{
         for (int i = 1; i < n; i++)
             b[i] = b[m - i] = std::conj(omegas[i]);
         // Convolution (using fourier transform and then dot product to have better performance)
-        ComplexArray convolved(m);
+        MyComplexArray convolved(m);
         double s = omp_get_wtime();
         convolved = convolve(a, b);
         double e = omp_get_wtime();
 
         std::cout <<"Conv: " << e - s << std::endl;
 
-        ComplexArray res(n);
+        MyComplexArray res(n);
         #pragma omp parallel for schedule(dynamic, 2)
         for (int i = 0; i < n; i++)
             res[i] = convolved[i] * omegas[i];
@@ -61,7 +61,7 @@ namespace Solver{
     * Convolution theorem
     * Computes the circular convolution of the given complex vectors. 
     */
-    const ComplexArray Ctz::convolve(ComplexArray& xvector,  ComplexArray& yvector) const {
+    const MyComplexArray Ctz::convolve(MyComplexArray& xvector,  MyComplexArray& yvector) const {
         //Transform(xvector, false);
         FFT fft_x(xvector);
         fft_x.solveIterative(false);
@@ -73,7 +73,7 @@ namespace Solver{
 
         xvector *= yvector;
         FFT inv(xvector);
-        ComplexArray outvector = inv.getInverse();
+        MyComplexArray outvector = inv.getInverse();
         return outvector;
     }
 

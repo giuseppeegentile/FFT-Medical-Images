@@ -11,9 +11,9 @@
 
 #include <complex>
 #include <valarray>
-#pragma once
-#include "ComplexMatrix.hpp"
 
+#pragma once
+#include "FFT_Traits.hpp"
 
 namespace Utility {
     typedef std::vector<std::vector<std::string>> Table;
@@ -32,11 +32,8 @@ namespace Utility {
             const int 
             getArraySize();
 
-            const ComplexArray
+            const MyComplexArray
             getArray() const;
-    
-            ComplexMatrix
-            getMatrix();
 
 
             int

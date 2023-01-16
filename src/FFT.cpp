@@ -2,39 +2,16 @@
 #define HH_READCVSHEADER_HH
 
 #include "FFT.hpp"
+
 namespace Solver{
     using namespace Solver;
-
-    ComplexArray
-    FFT::recursiveAlgorithm(const  ComplexArray& input){
-        const size_t N = input.size();
-        if (N <= 1) return input;
-
-        ComplexArray even = input[std::slice(0, N/2, 2)];
-        ComplexArray odd = input[std::slice(1, N/2, 2)];
-
-        ComplexArray y_even = recursiveAlgorithm(even);
-        ComplexArray y_odd = recursiveAlgorithm(odd);
-        ComplexArray ret(N);
-
-        for (size_t k = 0; k < N/2; ++k) {
-            Complex omega = std::exp(Complex(0, -2 * M_PI * k / N))* y_odd[k];
-            ret[k] = y_even[k] + omega;
-            ret[k+N/2] = y_even[k] - omega;
-        }
-        return ret;
-    }
-
-    void FFT::solveRecursive(){
-        output_data = recursiveAlgorithm(input_data);
-    }
 
     void FFT::solveIterative(const bool parallel = true){
         const size_t N = input_data.size();
         const int log = std::log2(N);
         omp_set_num_threads(4);
         omp_set_nested(1);
-        ComplexArray temp =  eval_inverse ? output_data : input_data;
+        MyComplexArray temp =  eval_inverse ? output_data : input_data;
         #pragma omp task shared(output_data, input_data) firstprivate(N) if(parallel)
         #pragma omp parallel for schedule(static) if(parallel)
         for (unsigned int i = 0; i < N; i++) {
@@ -68,16 +45,16 @@ namespace Solver{
         return n;
     }
 
-    ComplexArray FFT::getOutput(){
+    MyComplexArray FFT::getOutput(){
         return output_data;
     }
 
-    ComplexArray FFT::getInverse(){
+    MyComplexArray FFT::getInverse(){
         eval_inverse = true;
         const double n = output_data.size();
-        output_data = output_data.apply(std::conj);
+        output_data = output_data.apply();
         solveIterative(false);
-        output_data = output_data.apply(std::conj);
+        output_data = output_data.apply();
         output_data /= n;
         eval_inverse = false; //back to original value
         return output_data;
