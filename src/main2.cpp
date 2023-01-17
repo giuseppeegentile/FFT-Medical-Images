@@ -30,7 +30,7 @@ int main() {
     double s = omp_get_wtime();
     #pragma omp parallel for schedule(dynamic, 2)
     for(uint8_t c = 0; c < channel_num; c++){
-        images[0] = images[0].fft_convolve(c, gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
+        images[0] = images[0].fft_convolve(gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
     }double e = omp_get_wtime();
     std::cout << e-s << std::endl;
 

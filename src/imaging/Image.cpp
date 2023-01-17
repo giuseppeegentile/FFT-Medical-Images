@@ -81,48 +81,50 @@ const void Image::padKernel(size_t ker_width, size_t ker_height, const double ke
 	}
 }
 
-Image& Image::fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
+Image& Image::fft_convolve(size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::MDFFT;
-	//pad image
-	ComplexMatrix pad_img(w, h);
-	for(int i = 0; i < h; ++i) {
-		for(int j = 0; j < w; ++j) {
-            //pad_img[(i * w + j)] = (Complex(data[(i * w + j) * channels + channel], 0));
-            pad_img.add(i, j, Complex(data[(i * w + j) * channels + channel], 0));
-		}
-	}
-	//pad kernel
-	ComplexMatrix pad_ker(w, h);
-	padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
+    for(int channel = 0; channel < channels; channel++){
+        //pad image
+        ComplexMatrix pad_img(w, h);
+        for(int i = 0; i < h; ++i) {
+            for(int j = 0; j < w; ++j) {
+                //pad_img[(i * w + j)] = (Complex(data[(i * w + j) * channels + channel], 0));
+                pad_img.add(i, j, Complex(data[(i * w + j) * channels + channel], 0));
+            }
+        }
+        //pad kernel
+        ComplexMatrix pad_ker(w, h);
+        padKernel(ker_w, ker_h, ker, center_row, center_col, w, h, pad_ker);
 
-	//convolution
-    MDFFT fft_img(pad_img);
-    pad_img = fft_img.solveIterative();
-    
-    MDFFT fft_ker(pad_ker);
-    pad_ker = fft_ker.solveIterative();
+        //convolution
+        MDFFT fft_img(pad_img);
+        pad_img = fft_img.solveIterative();
+        
+        MDFFT fft_ker(pad_ker);
+        pad_ker = fft_ker.solveIterative();
 
-    ComplexMatrix dot(w, h);
-    pad_img.dotProduct(pad_ker, dot);
+        ComplexMatrix dot(w, h);
+        pad_img.dotProduct(pad_ker, dot);
 
-    MDFFT inv(dot);
-    ComplexMatrix out = inv.getInverse();
+        MDFFT inv(dot);
+        ComplexMatrix out = inv.getInverse();
 
 
-	//update pixel data
-	for(int i = 0; i < h; ++i) {
-		for(int j = 0; j < w; ++j) {
-			data[(i * w + j) * channels + channel] = convert_to_pixel(out(i, j).real());
-            //data[(i*w+j)*channels+channel] = (uint8_t)(std::round(dot(i, j).real())); //versione psichedelica
-		}
-	}
+        //update pixel data
+        for(int i = 0; i < h; ++i) {
+            for(int j = 0; j < w; ++j) {
+                data[(i * w + j) * channels + channel] = convert_to_pixel(out(i, j).real());
+                //data[(i*w+j)*channels+channel] = (uint8_t)(std::round(dot(i, j).real())); //versione psichedelica
+            }
+        }
+    }
 
 	return *this;
 }
 
 
 
-void Image::diff(Image& img) {
+Image& Image::diff(Image& img) {
     int min_channels = channels < img.channels ? channels : img.channels;
     int min_width = w < img.w ? w : img.w;
     int min_height = h < img.h ? h : img.h;
@@ -135,24 +137,24 @@ void Image::diff(Image& img) {
             }
         }
     }
+    return (*this);
 }
 
 const Image& Image::sobel(){
     Image cpy_x(*this);
     Image cpy_y(*this);
-    
-    Image gx(getWidth(), getHeight(), getChannels());
-    Image gy(getWidth(), getHeight(), getChannels());
-    for(int c = 0; c < getChannels(); c++){
-        gx = cpy_x.fft_convolve(c, 3, 3, sobel_kernel_x, 1, 1);
-        gy = cpy_y.fft_convolve(c, 3, 3, sobel_kernel_y, 1, 1);
-    }
+
+    /*Image gx(getWidth(), getHeight(), getChannels());
+    Image gy(getWidth(), getHeight(), getChannels());*/
+    cpy_x = cpy_x.fft_convolve(3, 3, sobel_kernel_x, 1, 1);
+    cpy_y = cpy_y.fft_convolve(3, 3, sobel_kernel_y, 1, 1);
+
 /*
     gx.write("../src/try_x.jpg", ImageType::JPG);
     gy.write("../src/try_y.jpg", ImageType::JPG);*/
     //compute the gradient
     for(size_t i = 0; i < size; i++)
-        data[i] = std::hypot(gx.data[i], gy.data[i]) / 8.0;
+        data[i] = std::hypot(cpy_x.data[i], cpy_y.data[i]) / 8.0;
 
     return *this;
 
@@ -301,54 +303,48 @@ const void Image::pad_for_kuwahara(const Image& res) const{
 }
 
 //-fast-math, try with it
-const void Image::kuwahara(const Image& res, const int ch) const {
-    //i want the min standard dev, so take the biggest possible value at the starting point
-    double min_avg = 255.;
-    double min_dev = std::numeric_limits<double>::max();
-    int min_row = 0;
-    int min_col = 0;
+void Image::kuwahara()  {
+    for(int ch = 0; ch < channels; ch++){
+        //i want the min standard dev, so take the biggest possible value at the starting point
+        double min_avg = 255.;
+        double min_dev = std::numeric_limits<double>::max();
+        int min_row = 0;
+        int min_col = 0;
 
-    for(int row = 0; row < getHeight(); row += kuwahara_kernel_size){  
-        for (int col = 0; col < getWidth(); col += kuwahara_kernel_size){
-            double sum = 0.0;
-            //for every row in the divided image of kernel size, sum the row
-            for(int i = row; i < row + kuwahara_kernel_size; i++){
-                for(int j = col; j < col + kuwahara_kernel_size; j++){
-                    sum += data[(i * getWidth() + j) * channels + ch];
+        for(int row = 0; row < getHeight(); row += kuwahara_kernel_size){ 
+            for (int col = 0; col < getWidth(); col += kuwahara_kernel_size){
+                double sum = 0.0;
+                //for every row in the divided image of kernel size, sum the row
+                for(int i = row; i < row + kuwahara_kernel_size; i++){
+                    for(int j = col; j < col + kuwahara_kernel_size; j++){
+                        sum += data[(i * getWidth() + j) * channels + ch];
+                    }
+                }
+                const double avg = sum / (double)(kuwahara_kernel_size * kuwahara_kernel_size);
+                double dev = 0.0;                
+                for(int i = row; i < row + kuwahara_kernel_size; i++){
+                    for(int j = col; j < col + kuwahara_kernel_size; j++){
+                        const double tmp =(data[(i * getWidth() + j)*channels  + ch ] - avg) ;
+                        dev += tmp * tmp;
+                    }    
+                }
+                dev /= (kuwahara_kernel_size * kuwahara_kernel_size);
+                dev = std::sqrt(dev);
+                if(dev < min_dev){
+                    min_dev = dev;
+                    min_avg = avg;
+                    min_row = row;
+                    min_col = col;
                 }
             }
-            const double avg = sum / (double)(kuwahara_kernel_size * kuwahara_kernel_size);
-            double dev = 0.0;                
-            for(int i = row; i < row + kuwahara_kernel_size; i++){
-                for(int j = col; j < col + kuwahara_kernel_size; j++){
-                    const double tmp =(data[(i * getWidth() + j)*channels  + ch ] - avg) ;
-                    dev += tmp * tmp;
-                }    
-            }
-            dev /= (kuwahara_kernel_size * kuwahara_kernel_size);
-            dev = std::sqrt(dev);
-            if(dev < min_dev){
-                min_dev = dev;
-                min_avg = avg;
-                min_row = row;
-                min_col = col;
+        }
+
+        for(int i = min_row + kuwahara_kernel_size/2; i < min_row + kuwahara_kernel_size; i++){
+            for(int j = min_col + kuwahara_kernel_size/2; j < min_col + kuwahara_kernel_size; j++){
+                data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(min_avg);
             }
         }
     }
-
-    for(int i = min_row + kuwahara_kernel_size/2; i < min_row + kuwahara_kernel_size; i++){
-        for(int j = min_col + kuwahara_kernel_size/2; j < min_col + kuwahara_kernel_size; j++){
-            res.data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(min_avg);
-        }
-    }
-    
-    /*const int num_blocks = getWidth() / (kuwahara_kernel_size);
-
-    for(int i = kuwahara_kernel_size / 2, m = 0; m < num_blocks; m++, i += kuwahara_kernel_size){
-        for(int j = kuwahara_kernel_size / 2, k = 0; k < num_blocks; k++, j += kuwahara_kernel_size){
-            res.data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(avg);
-        }
-    }*/
 }
 
 

@@ -15,9 +15,6 @@
 #include "../solvers/MDFFT.hpp"
 #include <memory>
 
-enum class ImageType {
-    PNG, JPG, BMP, TGA
-};
 class Image {
     public:        
         Image(const char* filename, int channel_force = 3) {
@@ -67,10 +64,10 @@ class Image {
         inline const uint8_t getChannels() const {return channels;};
 
         Image& convolve(uint8_t channel, uint32_t kernel_width, uint32_t kernel_height, double kernel[], uint32_t center_row, uint32_t center_col);
-        Image& fft_convolve(uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
+        Image& fft_convolve(size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
 
         const void padKernel(size_t ker_width, size_t ker_height, const double ker[], uint32_t center_row, uint32_t center_col, size_t pad_width, size_t pad_height, ComplexMatrix &pad_ker) const ;
-        void diff(Image& img);
+        Image& diff(Image& img);
 
         const Image& sobel();
 
@@ -82,7 +79,7 @@ class Image {
         Image& ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
 
         const void pad_for_kuwahara(const Image& res) const;
-        const void kuwahara(const Image& res, const int ch) const;
+        void kuwahara();
 
         void crop_to_center(const int width, const int height, const Image& res);
     private:
