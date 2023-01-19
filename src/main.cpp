@@ -47,7 +47,7 @@ int main() {
     d.write("../src/diff.jpg", ImageType::JPG);*/
 
 
-    KuwaharaTest* ku_test = new KuwaharaTest(ku);
+    KuwaharaTest* ku_test = new KuwaharaTest(ku, false);
     ku_test->test();
     ku_test->write("kuwhara");
     std::cout << "_________________________________________________________________________________________" << std::endl;

@@ -263,7 +263,7 @@ constexpr uint8_t channel_num = 2;
 
 constexpr int medical_img_size = 256;
 
-constexpr int kuwahara_kernel_size = 5;
+constexpr int kuwahara_kernel_size = 3;
 
 constexpr auto define_pad = [](const int kk_size) -> int {
     for(int i = 0; i < kk_size; i++){

@@ -8,7 +8,7 @@ namespace Test{
 
     class GenericTest {
         public:
-            GenericTest(ImageVector images_) : images(images_) {};
+            GenericTest(ImageVector images_, bool full_test_) : full_test(full_test_), images(images_) {};
 
             virtual void test() = 0;
 
@@ -22,14 +22,14 @@ namespace Test{
             }
 
         protected:
-            bool full_test = true;
+            bool full_test;
             ImageVector images;
     };
 
 
     class GaussTest : public GenericTest{
         public:
-            GaussTest(ImageVector images_) : GenericTest(images_) {};
+            GaussTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
 
             void test() {
                 const double start = omp_get_wtime();
@@ -47,7 +47,7 @@ namespace Test{
 
     class SobelTest : public GenericTest{
         public:
-            SobelTest(ImageVector images_) : GenericTest(images_) {};
+            SobelTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
 
             void test() {
                 full_test = false;
@@ -67,14 +67,14 @@ namespace Test{
 
     class KuwaharaTest : public GenericTest{
         public:
-            KuwaharaTest(ImageVector images_) : GenericTest(images_), outputs(100, Image(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num)) {};
+            KuwaharaTest(ImageVector images_, bool full_test_) : GenericTest(images_, full_test_), outputs(100, Image(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num)) {};
 
             void test() {
-                ImageVector outputs(100, Image(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num));
+                
+                const int start_idx = full_test ? 1 : noisy_start_idx;
+                const int end_idx = full_test ? 100 : noisy_end_idx;
                 const double start = omp_get_wtime();
-                //#pragma omp parallel for schedule(dynamic, 2)
-                for(int i = 74; i < 75; i++){
-                    images[i - 1].pad_for_kuwahara(outputs[i - 1]);
+                for(int i = start_idx; i < end_idx; i++){
                     images[i - 1].kuwahara();
                 }
                 const double end = omp_get_wtime();
@@ -82,7 +82,9 @@ namespace Test{
             } 
 
              void write(const std::string folder) {
-                for(int i = 74; i < 75; i++){
+                const int start_idx = full_test ? 1 : noisy_start_idx;
+                const int end_idx = full_test ? 100 : noisy_end_idx;
+                for(int i = start_idx; i < end_idx; i++){
                     std::string out = "../processed_medical_images/" + folder +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
                     images[i - 1].write(Tools::getChar(out), ImageType::JPG);
                 }/*

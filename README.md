@@ -8,7 +8,6 @@
         - Anisotropic diffusion 
         - Kuwahara
     To do:
-        - Rewrite clear tests and main
         - Rebuild 3d volume 
         - Doc
         - Report pdf
