@@ -72,27 +72,23 @@ namespace Test{
             void test() {
                 ImageVector outputs(100, Image(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num));
                 const double start = omp_get_wtime();
-                #pragma omp parallel for schedule(dynamic, 2)
-                for(int i = noisy_start_idx; i < noisy_end_idx; i++){
+                //#pragma omp parallel for schedule(dynamic, 2)
+                for(int i = 74; i < 75; i++){
                     images[i - 1].pad_for_kuwahara(outputs[i - 1]);
-                    outputs[i - 1].kuwahara();
-                    outputs[i - 1].crop_to_center(medical_img_size, medical_img_size, outputs[i - 1]);
-                    std::cout << "Kuwahara "<< i <<  std::endl;    
+                    images[i - 1].kuwahara();
                 }
                 const double end = omp_get_wtime();
                 std::cout << "Time taken by kuwahara: "<< end - start << std::endl; 
             } 
 
              void write(const std::string folder) {
-                const int start_idx = full_test ? 1 : noisy_start_idx;
-                const int end_idx = full_test ? 100 : noisy_end_idx;
-                for(int i = start_idx; i < end_idx; i++){
+                for(int i = 74; i < 75; i++){
                     std::string out = "../processed_medical_images/" + folder +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
-                    outputs[i - 1].write(Tools::getChar(out), ImageType::JPG);
-                }
+                    images[i - 1].write(Tools::getChar(out), ImageType::JPG);
+                }/*
                 Image tmp(images[75]);
                 tmp = tmp.diff(outputs[75]);
-                tmp.write("../src/diff.jpg",ImageType::JPG);
+                tmp.write("../src/diff.jpg",ImageType::JPG);*/
                 
 
             }

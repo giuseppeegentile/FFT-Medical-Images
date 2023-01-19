@@ -79,6 +79,7 @@ class Image {
         Image& ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col);
 
         const void pad_for_kuwahara(const Image& res) const;
+
         void kuwahara();
 
         void crop_to_center(const int width, const int height, const Image& res);

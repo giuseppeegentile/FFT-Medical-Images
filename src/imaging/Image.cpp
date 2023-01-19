@@ -301,51 +301,102 @@ const void Image::pad_for_kuwahara(const Image& res) const{
         }
     }
 }
-
-//-fast-math, try with it
 void Image::kuwahara()  {
+    double mean, variance;
     for(int ch = 0; ch < channels; ch++){
-        //i want the min standard dev, so take the biggest possible value at the starting point
-        double min_avg = 255.;
-        double min_dev = std::numeric_limits<double>::max();
-        int min_row = 0;
-        int min_col = 0;
-
-        for(int row = 0; row < getHeight(); row += kuwahara_kernel_size){ 
-            for (int col = 0; col < getWidth(); col += kuwahara_kernel_size){
-                double sum = 0.0;
-                //for every row in the divided image of kernel size, sum the row
-                for(int i = row; i < row + kuwahara_kernel_size; i++){
-                    for(int j = col; j < col + kuwahara_kernel_size; j++){
-                        sum += data[(i * getWidth() + j) * channels + ch];
+        std::cout << ch << std::endl;
+        for (int i = kuwahara_kernel_size/2; i < getHeight() - kuwahara_kernel_size/2; i++) {
+            std::cout << "Row " << i << std::endl;
+            for (int j = kuwahara_kernel_size/2; j < getWidth() - kuwahara_kernel_size/2; j++) {
+                
+                double min_variance = std::numeric_limits<double>::max();;
+                int min_mean_r, min_mean_g, min_mean_b;
+                for (int x = i - kuwahara_kernel_size/2; x <= i + kuwahara_kernel_size/2; x++) {
+                    for (int y = j - kuwahara_kernel_size/2; y <= j + kuwahara_kernel_size/2; y++) {
+                        mean = 0.0;
+                        variance = 0.0;
+                        for (int a = x - kuwahara_kernel_size/2; a <= x + kuwahara_kernel_size/2; a++) {
+                            for (int b = y - kuwahara_kernel_size/2; b <= y + kuwahara_kernel_size/2; b++) {
+                                mean += data[(a * w + b) * channels + ch];
+                            }
+                        }
+                        mean /= (kuwahara_kernel_size * kuwahara_kernel_size);
+                        for (int a = x - kuwahara_kernel_size/2; a <= x + kuwahara_kernel_size/2; a++) {
+                            for (int b = y - kuwahara_kernel_size/2; b <= y + kuwahara_kernel_size/2; b++) {
+                                variance += (data[(a * w + b) * channels + ch] - mean) * (data[(a * w + b) * channels + ch] - mean);
+                            }
+                        }
+                        variance /= (kuwahara_kernel_size * kuwahara_kernel_size);
+                        if (variance < min_variance) {
+                            min_variance = variance;
+                            min_mean_r = mean;
+                        }
                     }
                 }
-                const double avg = sum / (double)(kuwahara_kernel_size * kuwahara_kernel_size);
-                double dev = 0.0;                
-                for(int i = row; i < row + kuwahara_kernel_size; i++){
-                    for(int j = col; j < col + kuwahara_kernel_size; j++){
-                        const double tmp =(data[(i * getWidth() + j)*channels  + ch ] - avg) ;
-                        dev += tmp * tmp;
-                    }    
-                }
-                dev /= (kuwahara_kernel_size * kuwahara_kernel_size);
-                dev = std::sqrt(dev);
-                if(dev < min_dev){
-                    min_dev = dev;
-                    min_avg = avg;
-                    min_row = row;
-                    min_col = col;
-                }
-            }
-        }
-
-        for(int i = min_row + kuwahara_kernel_size/2; i < min_row + kuwahara_kernel_size; i++){
-            for(int j = min_col + kuwahara_kernel_size/2; j < min_col + kuwahara_kernel_size; j++){
-                data[(i * getWidth() + j) * channels + ch] = convert_to_pixel(min_avg);
+                data[(i * w + j) * channels + ch] = min_mean_r;
             }
         }
     }
 }
+//-fast-math, try with it
+/*void Image::kuwahara()  {
+    Image output(w, h, channels); // create a new Image object to store the output
+    // copy the data of the original image to the new Image object
+    std::copy_n(data.get(), w * h * channels, output.data.get());
+    const double filter_area = (double)(kuwahara_kernel_size * kuwahara_kernel_size);
+    for(int ch = 0; ch < channels; ch++){
+        //i want the min standard dev, so take the biggest possible value at the starting point
+        double min_avg;
+        double min_dev = std::numeric_limits<double>::max();
+        int min_row;
+        int min_col;
+
+        for(int row = 0; row < h; row += kuwahara_kernel_size - 1){ 
+            for (int col = 0; col < w; col += kuwahara_kernel_size - 1){
+                double sum = 0.0;
+                double dev = 0.0;  
+                //for every row in the divided image of kernel size, sum the row
+                for(int i = row; i < row + kuwahara_kernel_size; i++){
+                    for(int j = col; j < col + kuwahara_kernel_size; j++){
+                        sum += data[(i * w + j) * channels + ch]  ;
+                    }
+                }
+                
+                const double avg = sum / filter_area;
+                std::cout << avg << std::endl;
+                for(int i = row; i < row + kuwahara_kernel_size; i++){
+                    for(int j = col; j < col + kuwahara_kernel_size; j++){
+                        dev += (data[(i * w + j) * channels + ch] - avg) * (data[(i * w + j) * channels + ch] - avg);
+                    }    
+                }
+                dev /= filter_area;
+                dev = std::sqrt(dev);
+                 
+                if(dev < min_dev && avg != 0 && avg != 255){
+                    min_dev = dev;
+                    min_avg = avg;
+                    min_row = row;
+                    min_col = col;
+                    //std::cout << std::to_string(dev) <<std::endl;
+                }
+            }
+        }*/
+        
+        /*std::cout<< min_row - kuwahara_kernel_size / 2 << std::endl;
+        std::cout<< min_col - kuwahara_kernel_size / 2 << std::endl;*/
+        /*for(int i = min_row - kuwahara_kernel_size / 2; i < min_row + kuwahara_kernel_size / 2; i++){
+            for(int j = min_col - kuwahara_kernel_size / 2; j < min_col + kuwahara_kernel_size / 2; j++){
+                output.data[(i * w + j) * channels + ch] = convert_to_pixel(min_avg);
+            }
+        }*/
+        /*for(int i = 0; i < h; i++){
+            for(int j = 0; i < w; j++)
+                std::cout << data[(i * w + j) * channels + ch] << ", ";
+            std::cout << std::endl;
+        }*/
+  /*  }
+    *this = output;
+}*/
 
 
 void Image::crop_to_center(const int width, const int height, const Image& res){
