@@ -11,3 +11,12 @@
         - Rebuild 3d volume 
         - Doc
         - Report pdf
+
+
+# Instructions
+    Pull the repo inside the shared folder. Start the hpc-courses docker and then:
+        - module load dealii vtk
+        - mkdir build
+        - cd build
+        - cmake ..
+        - make && ./FFt

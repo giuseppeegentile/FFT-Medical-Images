@@ -83,6 +83,8 @@ class Image {
         void kuwahara();
 
         void crop_to_center(const int width, const int height, const Image& res);
+
+        inline uint8_t* getData() { return data.get(); }
     private:
         int w;
         int h;
