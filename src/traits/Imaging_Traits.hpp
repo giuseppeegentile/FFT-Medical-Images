@@ -10,6 +10,11 @@ const std::string format = ".jpg";
 enum class ImageType {
     PNG, JPG, BMP, TGA
 };
+constexpr uint8_t channel_num = 2;     
+
+constexpr int medical_img_size = 256;
+constexpr int images_num = 100;
+constexpr int dimensions[3] = {medical_img_size, medical_img_size, images_num};
 
 constexpr int noisy_start_idx = 75;
 constexpr int noisy_end_idx = 78;

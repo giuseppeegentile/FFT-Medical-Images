@@ -7,16 +7,21 @@
         - Gaussian filtering 
         - Anisotropic diffusion 
         - Kuwahara
+        - Rebuild 3d volume
     To do:
-        - Rebuild 3d volume 
-        - Doc
+        - Documentation
         - Report pdf
 
 
 # Instructions
-    Pull the repo inside the shared folder. Start the hpc-courses docker and then:
+    Pull the repo inside the shared folder.
+    Remember to give permission to the folder project (on linux): sudo chmod -R 777 FFT-Medical-Images
+    Start the hpc-courses docker and do the following:
         - module load dealii vtk
         - mkdir build
         - cd build
         - cmake ..
-        - make && ./FFt
+        - make && ./FFT
+
+    The 2D processed images are in the build/processed_medical_images folder. Each subfolder for different filters applied.
+    The .vti 3d images volume are named as filter_applied.vti. Visualize them in Paraview glance, suggested the MR-Default or MR-T2-Brain view colors.

@@ -2,6 +2,10 @@
 #include "../Utilities/Utilities.hpp"
 #include <iostream>
 
+
+#include <vtkSmartPointer.h>
+#include <vtkImageData.h>
+#include <vtkXMLImageDataWriter.h>
 typedef std::vector<Image> ImageVector;
 
 namespace Test{
@@ -13,15 +17,49 @@ namespace Test{
             virtual void test() = 0;
 
             void write(const std::string folder) {
+                volume = folder;
                 const int start_idx = full_test ? 1 : noisy_start_idx;
                 const int end_idx = full_test ? 100 : noisy_end_idx;
                 for(int i = start_idx; i < end_idx; i++){
-                    std::string out = "../processed_medical_images/" + folder +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
+                    std::string out = "processed_medical_images/" + folder +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
                     images[i - 1].write(Tools::getChar(out), ImageType::JPG);
                 }
             }
+            void buildVolume(){
+                vtkSmartPointer<vtkImageData> imageData = vtkSmartPointer<vtkImageData>::New();
+
+                // Set dimensions and spacing of the image data
+                
+                imageData->SetDimensions(dimensions);
+                imageData->AllocateScalars(VTK_UNSIGNED_CHAR, channel_num);
+                imageData->SetSpacing(1.0, 1.0, 1.0);
+
+                for (size_t i = 0; i < images.size(); i++) {
+                    for (int j = 0; j < images[i].getHeight(); j++) {
+                        for (int k = 0; k < images[i].getWidth(); k++) {
+                            for (int c = 0; c < images[i].getChannels(); c++) {
+                                // get the pixel value
+                                const uint8_t pixelValue = images[i].getData()[(j * images[i].getWidth() + k) * channel_num + c];
+                                // set the pixel value in the vtk image
+                                imageData->SetScalarComponentFromDouble(j, k, i, c, pixelValue);
+                            }
+                        }
+                    }
+                }
+
+                // Create VTK writer and set file name
+                vtkSmartPointer<vtkXMLImageDataWriter> writer = vtkSmartPointer<vtkXMLImageDataWriter>::New();
+                writer->SetFileName(Tools::getChar(volume + ".vti"));
+                writer->SetInputData(imageData);
+
+                // Write the image data to file
+                writer->Write();
+            }
+
+
 
         protected:
+            std::string volume;
             bool full_test;
             ImageVector images;
     };
@@ -35,7 +73,7 @@ namespace Test{
                 const double start = omp_get_wtime();
                 #pragma omp parallel for schedule(dynamic, 2)
                 for(int i = 1; i < 100; i++){
-                    images[i - 1] = images[i - 1].fft_convolve(gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
+                    images[i - 1].fft_convolve(gauss_five_size, gauss_five_size, gauss_std_five, 7, 7);
                     
                     std::cout << "Convolved "<< i <<  std::endl;    
                 }
@@ -43,6 +81,8 @@ namespace Test{
                 std::cout << "Time taken by fft convolution: "<< end - start << std::endl;
                 
             }
+
+            
     };
 
     class SobelTest : public GenericTest{
@@ -50,10 +90,11 @@ namespace Test{
             SobelTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
 
             void test() {
-                full_test = false;
+                const int start_idx = full_test ? 1 : noisy_start_idx;
+                const int end_idx = full_test ? 100 : noisy_end_idx;
                 const double start = omp_get_wtime();
                 #pragma omp parallel for schedule(dynamic, 2)
-                for(int i = noisy_start_idx; i < noisy_end_idx; i++){
+                for(int i = start_idx; i < end_idx; i++){
                     for(uint8_t c = 0; c < channel_num; c++){
                         images[i - 1] = images[i - 1].sobel();
                     }
@@ -67,10 +108,9 @@ namespace Test{
 
     class KuwaharaTest : public GenericTest{
         public:
-            KuwaharaTest(ImageVector images_, bool full_test_) : GenericTest(images_, full_test_), outputs(100, Image(medical_img_size + kuwahara_pad, medical_img_size + kuwahara_pad, channel_num)) {};
+            KuwaharaTest(ImageVector images_, bool full_test_) : GenericTest(images_, full_test_) {};
 
             void test() {
-                
                 const int start_idx = full_test ? 1 : noisy_start_idx;
                 const int end_idx = full_test ? 100 : noisy_end_idx;
                 const double start = omp_get_wtime();
@@ -80,22 +120,6 @@ namespace Test{
                 const double end = omp_get_wtime();
                 std::cout << "Time taken by kuwahara: "<< end - start << std::endl; 
             } 
-
-             void write(const std::string folder) {
-                const int start_idx = full_test ? 1 : noisy_start_idx;
-                const int end_idx = full_test ? 100 : noisy_end_idx;
-                for(int i = start_idx; i < end_idx; i++){
-                    std::string out = "../processed_medical_images/" + folder +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
-                    images[i - 1].write(Tools::getChar(out), ImageType::JPG);
-                }/*
-                Image tmp(images[75]);
-                tmp = tmp.diff(outputs[75]);
-                tmp.write("../src/diff.jpg",ImageType::JPG);*/
-                
-
-            }
-        private:
-            ImageVector outputs;
     };
 
 }

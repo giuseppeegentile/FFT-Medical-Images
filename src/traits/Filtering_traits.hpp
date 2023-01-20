@@ -259,9 +259,7 @@ constexpr double sobel_kernel_y[9] = {-1, -2, -1,
                                        0, 0 ,0,
                                        1, 2, 1};
 
-constexpr uint8_t channel_num = 2;     
 
-constexpr int medical_img_size = 256;
 
 constexpr int kuwahara_kernel_size = 3;
 
