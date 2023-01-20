@@ -1,6 +1,5 @@
 #include "Test/test.hpp"
 #include "solvers/FFT.hpp"
-#include "Utilities/CSV_Reader.hpp"
 #include "traits/Parallel_configuration.hpp"
 #include <filesystem>
 
@@ -28,23 +27,27 @@ int main() {
     std::vector<Image> gaussed_images(images);
     std::vector<Image> ku(images);
     std::vector<Image> sob(images);
-    std::vector<Image> aniso(images);
+    std::vector<Image> tmp(images);
 
-    
-    /*GenericTest* gauss_test = new GaussTest(gaussed_images, true);
+    GenericTest* original_volume = new GaussTest(tmp, true);
+    original_volume->buildVolume();
+
+
+    std::cout << "_________________________________________________________________________________________" << std::endl;
+    GenericTest* gauss_test = new GaussTest(gaussed_images, true);
     gauss_test->test();
     gauss_test->write("gaussed");
-    gauss_test->buildVolume();*/
+    gauss_test->buildVolume();
 
 
- 
-    /*GenericTest* sobel_test = new SobelTest(sob, true);
+    std::cout << "_________________________________________________________________________________________" << std::endl;
+    GenericTest* sobel_test = new SobelTest(sob, true);
     sobel_test->test();
     sobel_test->write("sobel");
-    sobel_test->buildVolume();*/
+    sobel_test->buildVolume();
 
 
-
+    std::cout << "_________________________________________________________________________________________" << std::endl;
     GenericTest* ku_test = new KuwaharaTest(ku, true);
     ku_test->test();
     ku_test->write("kuwahara");

@@ -9,7 +9,6 @@
 typedef std::vector<Image> ImageVector;
 
 namespace Test{
-
     class GenericTest {
         public:
             GenericTest(ImageVector images_, bool full_test_) : full_test(full_test_), images(images_) {};
@@ -47,6 +46,7 @@ namespace Test{
                     }
                 }
 
+                volume = (volume == "") ? "original_volume" : volume;
                 // Create VTK writer and set file name
                 vtkSmartPointer<vtkXMLImageDataWriter> writer = vtkSmartPointer<vtkXMLImageDataWriter>::New();
                 writer->SetFileName(Tools::getChar(volume + ".vti"));
@@ -57,12 +57,12 @@ namespace Test{
             }
 
 
-
         protected:
-            std::string volume;
+            std::string volume = "";
             bool full_test;
             ImageVector images;
     };
+
 
 
     class GaussTest : public GenericTest{
