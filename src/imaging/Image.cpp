@@ -153,6 +153,7 @@ const Image& Image::sobel(){
     gx.write("../src/try_x.jpg", ImageType::JPG);
     gy.write("../src/try_y.jpg", ImageType::JPG);*/
     //compute the gradient
+    #pragma omp parallel for
     for(size_t i = 0; i < size; i++)
         data[i] = std::hypot(cpy_x.data[i], cpy_y.data[i]) / 8.0;
 
@@ -165,7 +166,8 @@ const Image& Image::sobel(){
 const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k) const {
     Image g_norm(*this);
     
-    for(int ch = 0; ch <= getChannels(); ch++){
+    #pragma omp parallel for schedule(dynamic, 2)
+    for(int ch = 0; ch < getChannels(); ch++){
         g_norm.sobel();
         Image newDest(dst);
         for (int i = 0; i < num_iterations; i++) {

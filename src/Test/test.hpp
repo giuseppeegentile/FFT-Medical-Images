@@ -122,4 +122,27 @@ namespace Test{
             } 
     };
 
+
+    class AnisotropicTest : public GenericTest{
+    public:
+        AnisotropicTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
+
+        void test() {
+            const int start_idx = full_test ? 1 : noisy_start_idx;
+            const int end_idx = full_test ? 100 : noisy_end_idx;
+            const double start = omp_get_wtime();
+            #pragma omp parallel for schedule(dynamic, 2)
+            for(int i = start_idx; i < end_idx; i++){
+                images[i - 1].anisotropic_diffusion(images[i - 1], 300, 0.7);
+                
+                std::cout << "Anisotropic "<< i <<  std::endl;    
+            }
+            const double end = omp_get_wtime();
+            std::cout << "Time taken by fft convolution: "<< end - start << std::endl;
+            
+        }
+
+            
+    };
+
 }

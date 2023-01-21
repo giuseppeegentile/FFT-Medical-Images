@@ -15,6 +15,7 @@ int main() {
     std::filesystem::create_directories("processed_medical_images/gaussed");
     std::filesystem::create_directories("processed_medical_images/kuwahara");
     std::filesystem::create_directories("processed_medical_images/sobel");
+    std::filesystem::create_directories("processed_medical_images/anisotropic");
 
     std::vector<Image> images;
     
@@ -27,6 +28,7 @@ int main() {
     std::vector<Image> gaussed_images(images);
     std::vector<Image> ku(images);
     std::vector<Image> sob(images);
+    std::vector<Image> aniso(images);
     std::vector<Image> tmp(images);
 
     GenericTest* original_volume = new GaussTest(tmp, true);
@@ -54,7 +56,10 @@ int main() {
     ku_test->buildVolume();
     std::cout << "_________________________________________________________________________________________" << std::endl;
 
-
+    GenericTest* anisotropic_test = new AnisotropicTest(aniso, true);
+    anisotropic_test->test();
+    anisotropic_test->write("anisotropic");
+    anisotropic_test->buildVolume();
 
 
     return 0;
