@@ -1,8 +1,16 @@
 
 
+/**
+ * @brief 3x3 gauss kernel, normal distribution
+ * 
+ */
 constexpr double gauss_normal[9] = {1./16., 2./16.,1./16., 
                                     2./16.,4./16.,2./16.,
                                     1./16., 2./16.,1./16.};
+/**
+ * @brief 15 x 15 gauss kernel, again distribution
+ * 
+ */
 constexpr double gauss_std_five[225] = {0.0008967325586281263 , 
 0.001162999434977595 , 
 0.0014491865336118527 , 
@@ -249,12 +257,19 @@ constexpr size_t gauss_normal_size = 3;
 constexpr size_t gauss_five_size = 15;
 
 
-
+/**
+ * @brief Sobel kernel 3x3 detecting y edges
+ * 
+ */
 constexpr double sobel_kernel_x[9] = {-1, 0, 1, 
                                       -2, 0 ,2,
                                       -1, 0, 1};
 
 
+/**
+ * @brief Sobel kernel 3x3 detecting x edges
+ * 
+ */
 constexpr double sobel_kernel_y[9] = {-1, -2, -1, 
                                        0, 0 ,0,
                                        1, 2, 1};
@@ -263,7 +278,7 @@ constexpr double sobel_kernel_y[9] = {-1, -2, -1,
 
 constexpr int kuwahara_kernel_size = 3;
 
-constexpr auto define_pad = [](const int kk_size) -> int {
+/*constexpr auto define_pad = [](const int kk_size) -> int {
     for(int i = 0; i < kk_size; i++){
         if( ! ((medical_img_size + i ) % kk_size)) return i;
     }
@@ -272,13 +287,7 @@ constexpr auto define_pad = [](const int kk_size) -> int {
 constexpr int kuwahara_pad = define_pad(kuwahara_kernel_size);
 
 constexpr auto get_indexes = [](int center_indexes[]) -> int* {
-    /*
-    for(int i = kuwahara_kernel_size/2; i < borders; i++){
-        for(int j = kuwahara_kernel_size / 2; j < borders; j+=kuwahara_kernel_size){
-            center_indexes[(i -  kuwahara_kernel_size/2) * borders + j -  kuwahara_kernel_size/2] = (kuwahara_kernel_size / 2) * (medical_img_size + kuwahara_pad) + j+ kuwahara_kernel_size / 2;            
-        }
-    }
-    return center_indexes;*/
+
     const int borders =  (medical_img_size + kuwahara_pad) / kuwahara_kernel_size;
     for(int i = 0; i < borders; i++){
         for(int j = 0, k = kuwahara_kernel_size / 2; j < borders; j++, k += kuwahara_kernel_size){
@@ -288,7 +297,7 @@ constexpr auto get_indexes = [](int center_indexes[]) -> int* {
     }
     return center_indexes;
 };
-
+*/
 
 
 

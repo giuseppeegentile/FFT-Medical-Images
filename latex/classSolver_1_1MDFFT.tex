@@ -1,0 +1,71 @@
+\hypertarget{classSolver_1_1MDFFT}{}\doxysection{Solver\+::M\+D\+F\+FT Class Reference}
+\label{classSolver_1_1MDFFT}\index{Solver::MDFFT@{Solver::MDFFT}}
+
+
+{\ttfamily \#include $<$M\+D\+F\+F\+T.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSolver_1_1MDFFT_a2b7584990e0920f36a3e80343976f5eb}{M\+D\+F\+FT}} (const \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&input\+\_\+data\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classSolver_1_1MDFFT}{M\+D\+F\+FT}} object, storing input matrix and assuming first a forward \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} will be performed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \mbox{\hyperlink{classSolver_1_1MDFFT_a7f19b5f78e86ec36dac432599b0bb7c0}{solve\+Iterative}} ()
+\begin{DoxyCompactList}\small\item\em Compute iteratively the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} on 2D input. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \mbox{\hyperlink{classSolver_1_1MDFFT_a868406436e4079acaaab77f89b6a2160}{get\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em Get the Inverse of the performed \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+2D \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} solver. Perform twice the following\+: computes \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} on each row, insert in col major the transformed rows(avoid transpose). 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSolver_1_1MDFFT_a2b7584990e0920f36a3e80343976f5eb}\label{classSolver_1_1MDFFT_a2b7584990e0920f36a3e80343976f5eb}} 
+\index{Solver::MDFFT@{Solver::MDFFT}!MDFFT@{MDFFT}}
+\index{MDFFT@{MDFFT}!Solver::MDFFT@{Solver::MDFFT}}
+\doxysubsubsection{\texorpdfstring{MDFFT()}{MDFFT()}}
+{\footnotesize\ttfamily Solver\+::\+M\+D\+F\+F\+T\+::\+M\+D\+F\+FT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&}]{input\+\_\+data\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classSolver_1_1MDFFT}{M\+D\+F\+FT}} object, storing input matrix and assuming first a forward \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} will be performed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+data\+\_\+} & the data on which the transform will be performed. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSolver_1_1MDFFT_a868406436e4079acaaab77f89b6a2160}\label{classSolver_1_1MDFFT_a868406436e4079acaaab77f89b6a2160}} 
+\index{Solver::MDFFT@{Solver::MDFFT}!getInverse@{getInverse}}
+\index{getInverse@{getInverse}!Solver::MDFFT@{Solver::MDFFT}}
+\doxysubsubsection{\texorpdfstring{getInverse()}{getInverse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} Solver\+::\+M\+D\+F\+F\+T\+::get\+Inverse (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the Inverse of the performed \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} the result 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSolver_1_1MDFFT_a7f19b5f78e86ec36dac432599b0bb7c0}\label{classSolver_1_1MDFFT_a7f19b5f78e86ec36dac432599b0bb7c0}} 
+\index{Solver::MDFFT@{Solver::MDFFT}!solveIterative@{solveIterative}}
+\index{solveIterative@{solveIterative}!Solver::MDFFT@{Solver::MDFFT}}
+\doxysubsubsection{\texorpdfstring{solveIterative()}{solveIterative()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} Solver\+::\+M\+D\+F\+F\+T\+::solve\+Iterative (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Compute iteratively the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} on 2D input. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} the input in fourier domain 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/solvers/M\+D\+F\+F\+T.\+hpp\item 
+src/solvers/M\+D\+F\+F\+T.\+cpp\end{DoxyCompactItemize}

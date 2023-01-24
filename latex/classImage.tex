@@ -1,0 +1,412 @@
+\hypertarget{classImage}{}\doxysection{Image Class Reference}
+\label{classImage}\index{Image@{Image}}
+
+
+Storage and various methods on images.  
+
+
+
+
+{\ttfamily \#include $<$Image.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classImage_a3d513ea3fba867efd2a162dc8b4fb863}{Image}} (const char $\ast$filename, int channel\+\_\+force=3)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classImage}{Image}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage_a5d90afbc9d1cd4b5d2e284d3a7251c90}{Image}} (int w\+\_\+, int h\+\_\+, int channels\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classImage}{Image}} object, given the width, heigth, and channels. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage_aa44ed77d00d96d2c878b050835f828c4}{Image}} (const \mbox{\hyperlink{classImage}{Image}} \&img)
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_a94e0f886fd07a9b7a2c66479d1b4af79}{operator=}} (const \mbox{\hyperlink{classImage}{Image}} \&other)
+\begin{DoxyCompactList}\small\item\em Assignment operator override. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classImage_a101417c3c79f5629db5d5cc416348e11}{read}} (const char $\ast$filename, int channel\+\_\+force=0)
+\begin{DoxyCompactList}\small\item\em Read image from file. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classImage_a7fc3dda3d0a7ee0274b50906a0ebe9c2}{write}} (const char $\ast$filename, Image\+Type type)
+\begin{DoxyCompactList}\small\item\em Write image to file. \end{DoxyCompactList}\item 
+const size\+\_\+t \mbox{\hyperlink{classImage_ab01b9e2bf7c204befd71a7e8aa94cd19}{get\+Size}} () const
+\begin{DoxyCompactList}\small\item\em Get the size of the image on disk. \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{classImage_a2087b97aa1f916997995aadc13f8ff0e}{get\+Width}} () const
+\begin{DoxyCompactList}\small\item\em Get the Width of the image. \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{classImage_a3e22fb44ff982b843a5a0166c15013ff}{get\+Height}} () const
+\begin{DoxyCompactList}\small\item\em Get the Heigth of the image. \end{DoxyCompactList}\item 
+const uint8\+\_\+t \mbox{\hyperlink{classImage_a36e677aa6c9a217b83b58ee7233bd14e}{get\+Channels}} () const
+\begin{DoxyCompactList}\small\item\em Get the Channels of the image. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_a7e4ea0e5165d98f2681fb3b1f32f1578}{convolve}} (uint8\+\_\+t channel, uint32\+\_\+t kernel\+\_\+width, uint32\+\_\+t kernel\+\_\+height, double kernel\mbox{[}$\,$\mbox{]}, uint32\+\_\+t center\+\_\+row, uint32\+\_\+t center\+\_\+col)
+\begin{DoxyCompactList}\small\item\em Convolution without using the F\+FT algorithm. Perform the naive convolution operator with no optimization. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_a840601a0bfa466bfaef1f5fb1e03c31a}{fft\+\_\+convolve}} (size\+\_\+t ker\+\_\+w, size\+\_\+t ker\+\_\+h, const double ker\mbox{[}$\,$\mbox{]}, uint32\+\_\+t center\+\_\+row, uint32\+\_\+t center\+\_\+col)
+\begin{DoxyCompactList}\small\item\em Convolution using the F\+FT algorithm. Parallel on the channels, and uses the parallel version of the 2D F\+FT. \end{DoxyCompactList}\item 
+const void \mbox{\hyperlink{classImage_a007f65c7f8208cdcb89498ddd34f984e}{pad\+Kernel}} (size\+\_\+t ker\+\_\+width, size\+\_\+t ker\+\_\+height, const double ker\mbox{[}$\,$\mbox{]}, uint32\+\_\+t center\+\_\+row, uint32\+\_\+t center\+\_\+col, size\+\_\+t pad\+\_\+width, size\+\_\+t pad\+\_\+height, \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&pad\+\_\+ker) const
+\begin{DoxyCompactList}\small\item\em Pad the kernel to the image. Puts the first \char`\"{}center\+\_\+row\char`\"{} (and col) on the top left of the image. The remaining are put on the other borders\+: top-\/right, bottom-\/left, bottom-\/right. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_a864448851c47da56102aab2c62850c4d}{diff}} (\mbox{\hyperlink{classImage}{Image}} \&img)
+\begin{DoxyCompactList}\small\item\em Perform the pixel by pixel difference of two images (this and img). \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_a58a6951ceefd6830aadaf237414249bc}{sobel}} ()
+\begin{DoxyCompactList}\small\item\em Perform the sobel operator. Create image emphasising edges, using a 3x3 gauss transformation. \end{DoxyCompactList}\item 
+const void \mbox{\hyperlink{classImage_ae8db531534be8955a56c7c3f2bd8a7e4}{anisotropic\+\_\+diffusion}} (\mbox{\hyperlink{classImage}{Image}} \&dst, int num\+\_\+iterations, float k) const
+\begin{DoxyCompactList}\small\item\em Perona-\/\+Malik diffusion. Uses the sobel operator implemented (and therefore a 3x3 gauss). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classImage}{Image}} \& \mbox{\hyperlink{classImage_abb937b7ea58e5e23e54e457a11bc3f5f}{ctz\+\_\+convolve}} (const uint8\+\_\+t channel, size\+\_\+t ker\+\_\+w, size\+\_\+t ker\+\_\+h, const double ker\mbox{[}$\,$\mbox{]}, uint32\+\_\+t center\+\_\+row, uint32\+\_\+t center\+\_\+col)
+\begin{DoxyCompactList}\small\item\em Convolution using the Bluestein algorithm. Works for non power of two images width or heigth (or both) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classImage_a5dc2282b13c3e9954644a9b5642e4018}{kuwahara}} ()
+\begin{DoxyCompactList}\small\item\em Apply the kuwahara filter, parallel over the channels. \end{DoxyCompactList}\item 
+uint8\+\_\+t $\ast$ \mbox{\hyperlink{classImage_af01128e6fa2962f1afc8a8fdc6de4190}{get\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Get the storage data of the image. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Storage and various methods on images. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classImage_a3d513ea3fba867efd2a162dc8b4fb863}\label{classImage_a3d513ea3fba867efd2a162dc8b4fb863}} 
+\index{Image@{Image}!Image@{Image}}
+\index{Image@{Image}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{Image()}{Image()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Image\+::\+Image (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{int}]{channel\+\_\+force = {\ttfamily 3} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classImage}{Image}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & the path on the filesystem of the image \\
+\hline
+{\em channel\+\_\+force} & how many channels the image has \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classImage_a5d90afbc9d1cd4b5d2e284d3a7251c90}\label{classImage_a5d90afbc9d1cd4b5d2e284d3a7251c90}} 
+\index{Image@{Image}!Image@{Image}}
+\index{Image@{Image}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{Image()}{Image()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Image\+::\+Image (\begin{DoxyParamCaption}\item[{int}]{w\+\_\+,  }\item[{int}]{h\+\_\+,  }\item[{int}]{channels\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classImage}{Image}} object, given the width, heigth, and channels. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em w\+\_\+} & image pixel width \\
+\hline
+{\em h\+\_\+} & image pixel heigth \\
+\hline
+{\em channels\+\_\+} & image channels (i.\+e. R\+GB = 3 channels, greyscale = 2) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classImage_aa44ed77d00d96d2c878b050835f828c4}\label{classImage_aa44ed77d00d96d2c878b050835f828c4}} 
+\index{Image@{Image}!Image@{Image}}
+\index{Image@{Image}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{Image()}{Image()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Image\+::\+Image (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classImage}{Image}} \&}]{img }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em img} & the image to shallow-\/copy \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classImage_ae8db531534be8955a56c7c3f2bd8a7e4}\label{classImage_ae8db531534be8955a56c7c3f2bd8a7e4}} 
+\index{Image@{Image}!anisotropic\_diffusion@{anisotropic\_diffusion}}
+\index{anisotropic\_diffusion@{anisotropic\_diffusion}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{anisotropic\_diffusion()}{anisotropic\_diffusion()}}
+{\footnotesize\ttfamily const void Image\+::anisotropic\+\_\+diffusion (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classImage}{Image}} \&}]{dst,  }\item[{int}]{num\+\_\+iterations,  }\item[{float}]{k }\end{DoxyParamCaption}) const}
+
+
+
+Perona-\/\+Malik diffusion. Uses the sobel operator implemented (and therefore a 3x3 gauss). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & the output image \\
+\hline
+{\em num\+\_\+iterations} & the number of iteration that will be performed to differentiate the image. \\
+\hline
+{\em k} & the reduction factor, must be in range (0, 1). Higher numbers will reduce more noisy images, but more image information will be lost. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classImage_a7e4ea0e5165d98f2681fb3b1f32f1578}\label{classImage_a7e4ea0e5165d98f2681fb3b1f32f1578}} 
+\index{Image@{Image}!convolve@{convolve}}
+\index{convolve@{convolve}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{convolve()}{convolve()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classImage}{Image}} \& Image\+::convolve (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{channel,  }\item[{uint32\+\_\+t}]{kernel\+\_\+width,  }\item[{uint32\+\_\+t}]{kernel\+\_\+height,  }\item[{double}]{kernel\mbox{[}$\,$\mbox{]},  }\item[{uint32\+\_\+t}]{center\+\_\+row,  }\item[{uint32\+\_\+t}]{center\+\_\+col }\end{DoxyParamCaption})}
+
+
+
+Convolution without using the F\+FT algorithm. Perform the naive convolution operator with no optimization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em channel} & the channel where to perform the convolution \\
+\hline
+{\em kernel\+\_\+width} & width of the kernel \\
+\hline
+{\em kernel\+\_\+height} & heigth of the kernel \\
+\hline
+{\em kernel} & the matrix of the kernel \\
+\hline
+{\em center\+\_\+row} & the center row of the kernel, up where to which row to pad the kernel to image next \\
+\hline
+{\em center\+\_\+col} & the center column of the kernel, up where to which column to pad the kernel to image next \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classImage}{Image}}\& the convolved image 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_abb937b7ea58e5e23e54e457a11bc3f5f}\label{classImage_abb937b7ea58e5e23e54e457a11bc3f5f}} 
+\index{Image@{Image}!ctz\_convolve@{ctz\_convolve}}
+\index{ctz\_convolve@{ctz\_convolve}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{ctz\_convolve()}{ctz\_convolve()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classImage}{Image}} \& Image\+::ctz\+\_\+convolve (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t}]{channel,  }\item[{size\+\_\+t}]{ker\+\_\+w,  }\item[{size\+\_\+t}]{ker\+\_\+h,  }\item[{const double}]{ker\mbox{[}$\,$\mbox{]},  }\item[{uint32\+\_\+t}]{center\+\_\+row,  }\item[{uint32\+\_\+t}]{center\+\_\+col }\end{DoxyParamCaption})}
+
+
+
+Convolution using the Bluestein algorithm. Works for non power of two images width or heigth (or both) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ker\+\_\+w} & width of the kernel \\
+\hline
+{\em ker\+\_\+h} & heigth of the kernel \\
+\hline
+{\em ker} & the matrix of the kernel \\
+\hline
+{\em center\+\_\+row} & the center row of the kernel, up where to which row to pad the kernel to image next \\
+\hline
+{\em center\+\_\+col} & the center column of the kernel, up where to which column to pad the kernel to image next \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classImage}{Image}}\& the convolved image 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a864448851c47da56102aab2c62850c4d}\label{classImage_a864448851c47da56102aab2c62850c4d}} 
+\index{Image@{Image}!diff@{diff}}
+\index{diff@{diff}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{diff()}{diff()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classImage}{Image}} \& Image\+::diff (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classImage}{Image}} \&}]{img }\end{DoxyParamCaption})}
+
+
+
+Perform the pixel by pixel difference of two images (this and img). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em img} & the image to differentiate from this \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+$\ast$ \mbox{\hyperlink{classImage}{Image}}\& the difference image 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a840601a0bfa466bfaef1f5fb1e03c31a}\label{classImage_a840601a0bfa466bfaef1f5fb1e03c31a}} 
+\index{Image@{Image}!fft\_convolve@{fft\_convolve}}
+\index{fft\_convolve@{fft\_convolve}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{fft\_convolve()}{fft\_convolve()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classImage}{Image}} \& Image\+::fft\+\_\+convolve (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{ker\+\_\+w,  }\item[{size\+\_\+t}]{ker\+\_\+h,  }\item[{const double}]{ker\mbox{[}$\,$\mbox{]},  }\item[{uint32\+\_\+t}]{center\+\_\+row,  }\item[{uint32\+\_\+t}]{center\+\_\+col }\end{DoxyParamCaption})}
+
+
+
+Convolution using the F\+FT algorithm. Parallel on the channels, and uses the parallel version of the 2D F\+FT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ker\+\_\+w} & width of the kernel \\
+\hline
+{\em ker\+\_\+h} & heigth of the kernel \\
+\hline
+{\em ker} & the matrix of the kernel \\
+\hline
+{\em center\+\_\+row} & the center row of the kernel, up where to which row to pad the kernel to image next \\
+\hline
+{\em center\+\_\+col} & the center column of the kernel, up where to which column to pad the kernel to image next \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classImage}{Image}}\& the convolved image 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a36e677aa6c9a217b83b58ee7233bd14e}\label{classImage_a36e677aa6c9a217b83b58ee7233bd14e}} 
+\index{Image@{Image}!getChannels@{getChannels}}
+\index{getChannels@{getChannels}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{getChannels()}{getChannels()}}
+{\footnotesize\ttfamily const uint8\+\_\+t Image\+::get\+Channels (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Channels of the image. 
+
+\begin{DoxyReturn}{Returns}
+const int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_af01128e6fa2962f1afc8a8fdc6de4190}\label{classImage_af01128e6fa2962f1afc8a8fdc6de4190}} 
+\index{Image@{Image}!getData@{getData}}
+\index{getData@{getData}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{getData()}{getData()}}
+{\footnotesize\ttfamily uint8\+\_\+t$\ast$ Image\+::get\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the storage data of the image. 
+
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t$\ast$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a3e22fb44ff982b843a5a0166c15013ff}\label{classImage_a3e22fb44ff982b843a5a0166c15013ff}} 
+\index{Image@{Image}!getHeight@{getHeight}}
+\index{getHeight@{getHeight}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{getHeight()}{getHeight()}}
+{\footnotesize\ttfamily const int Image\+::get\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Heigth of the image. 
+
+\begin{DoxyReturn}{Returns}
+const int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_ab01b9e2bf7c204befd71a7e8aa94cd19}\label{classImage_ab01b9e2bf7c204befd71a7e8aa94cd19}} 
+\index{Image@{Image}!getSize@{getSize}}
+\index{getSize@{getSize}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily const size\+\_\+t Image\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the size of the image on disk. 
+
+\begin{DoxyReturn}{Returns}
+const size\+\_\+t calculated as width $\ast$ heigth $\ast$ channels 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a2087b97aa1f916997995aadc13f8ff0e}\label{classImage_a2087b97aa1f916997995aadc13f8ff0e}} 
+\index{Image@{Image}!getWidth@{getWidth}}
+\index{getWidth@{getWidth}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{getWidth()}{getWidth()}}
+{\footnotesize\ttfamily const int Image\+::get\+Width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Width of the image. 
+
+\begin{DoxyReturn}{Returns}
+const int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a5dc2282b13c3e9954644a9b5642e4018}\label{classImage_a5dc2282b13c3e9954644a9b5642e4018}} 
+\index{Image@{Image}!kuwahara@{kuwahara}}
+\index{kuwahara@{kuwahara}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{kuwahara()}{kuwahara()}}
+{\footnotesize\ttfamily void Image\+::kuwahara (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Apply the kuwahara filter, parallel over the channels. 
+
+\mbox{\Hypertarget{classImage_a94e0f886fd07a9b7a2c66479d1b4af79}\label{classImage_a94e0f886fd07a9b7a2c66479d1b4af79}} 
+\index{Image@{Image}!operator=@{operator=}}
+\index{operator=@{operator=}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classImage}{Image}}\& Image\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classImage}{Image}} \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Assignment operator override. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & the image assigned to this \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classImage}{Image}}\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a007f65c7f8208cdcb89498ddd34f984e}\label{classImage_a007f65c7f8208cdcb89498ddd34f984e}} 
+\index{Image@{Image}!padKernel@{padKernel}}
+\index{padKernel@{padKernel}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{padKernel()}{padKernel()}}
+{\footnotesize\ttfamily const void Image\+::pad\+Kernel (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{ker\+\_\+width,  }\item[{size\+\_\+t}]{ker\+\_\+height,  }\item[{const double}]{ker\mbox{[}$\,$\mbox{]},  }\item[{uint32\+\_\+t}]{center\+\_\+row,  }\item[{uint32\+\_\+t}]{center\+\_\+col,  }\item[{size\+\_\+t}]{pad\+\_\+width,  }\item[{size\+\_\+t}]{pad\+\_\+height,  }\item[{\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&}]{pad\+\_\+ker }\end{DoxyParamCaption}) const}
+
+
+
+Pad the kernel to the image. Puts the first \char`\"{}center\+\_\+row\char`\"{} (and col) on the top left of the image. The remaining are put on the other borders\+: top-\/right, bottom-\/left, bottom-\/right. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ker\+\_\+width} & width of the kernel \\
+\hline
+{\em ker\+\_\+height} & heigth of the kernel \\
+\hline
+{\em ker} & the matrix of the kernel \\
+\hline
+{\em center\+\_\+row} & the center row of the kernel, up where to which row to pad the kernel to image next \\
+\hline
+{\em center\+\_\+col} & the center column of the kernel, up where to which column to pad the kernel to image next \\
+\hline
+{\em pad\+\_\+width} & the width of the image \\
+\hline
+{\em pad\+\_\+height} & the heigth of the image \\
+\hline
+{\em pad\+\_\+ker} & the kernel padded \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classImage_a101417c3c79f5629db5d5cc416348e11}\label{classImage_a101417c3c79f5629db5d5cc416348e11}} 
+\index{Image@{Image}!read@{read}}
+\index{read@{read}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily bool Image\+::read (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{int}]{channel\+\_\+force = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Read image from file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & where the image is stored \\
+\hline
+{\em channel\+\_\+force} & the channels of the image \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if read is successful 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a58a6951ceefd6830aadaf237414249bc}\label{classImage_a58a6951ceefd6830aadaf237414249bc}} 
+\index{Image@{Image}!sobel@{sobel}}
+\index{sobel@{sobel}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{sobel()}{sobel()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classImage}{Image}} \& Image\+::sobel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Perform the sobel operator. Create image emphasising edges, using a 3x3 gauss transformation. 
+
+\begin{DoxyReturn}{Returns}
+const \mbox{\hyperlink{classImage}{Image}}\& the filtered image 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a7fc3dda3d0a7ee0274b50906a0ebe9c2}\label{classImage_a7fc3dda3d0a7ee0274b50906a0ebe9c2}} 
+\index{Image@{Image}!write@{write}}
+\index{write@{write}!Image@{Image}}
+\doxysubsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily bool Image\+::write (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{Image\+Type}]{type }\end{DoxyParamCaption})}
+
+
+
+Write image to file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & where the image will be stored \\
+\hline
+{\em type} & the image extension (i.\+e. J\+PG) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if write was successful 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/imaging/Image.\+hpp\item 
+src/imaging/Image.\+cpp\end{DoxyCompactItemize}

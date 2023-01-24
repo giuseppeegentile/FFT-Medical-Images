@@ -83,6 +83,7 @@ const void Image::padKernel(size_t ker_width, size_t ker_height, const double ke
 
 Image& Image::fft_convolve(size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
     using Solver::MDFFT;
+    #pragma omp parallel for 
     for(int channel = 0; channel < channels; channel++){
         //pad image
         ComplexMatrix pad_img(w, h);
@@ -164,9 +165,10 @@ const Image& Image::sobel(){
 //Perona - Malik equation to calculate the new intensity of each pixels
 //k: sensitivity of the filter
 const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k) const {
+    assert(k < 1 && k > 0);
     Image g_norm(*this);
     
-    #pragma omp parallel for schedule(dynamic, 2)
+    #pragma omp parallel for 
     for(int ch = 0; ch < getChannels(); ch++){
         g_norm.sobel();
         Image newDest(dst);
@@ -196,7 +198,7 @@ const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k)
     }
 
 }
-
+/*
 void Image::merge_2d(const std::vector<Image> &images) {
     const int img_size = images.size();
     for(int img = 0; img < img_size / 2; img++){
@@ -218,25 +220,8 @@ void Image::merge_2d(const std::vector<Image> &images) {
             }
         }
     }
-/*
-    for(int i = 0; i < medical_img_size; i++){
-        for(int j = 0; j < medical_img_size; j++){
-            for(uint8_t c = 0; c < getChannels(); c++){
-                data[((i* getWidth() + j) * channels + c) ] = images[0].data[(i * medical_img_size + j) * channels + c];
-            }
-        }
-    }
 
-    for(int i = 0; i < medical_img_size; i++){
-        for(int j = 0; j < medical_img_size; j++){
-            for(uint8_t c = 0; c < getChannels(); c++){
-                data[((i* getWidth() + medical_img_size + j) * channels + c)] = images[1].data[(i * medical_img_size + j) * channels + c];
-            }
-        }
-    }
-
-*/
-}
+}*/
 
 
 Image& Image::ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, const double ker[], uint32_t center_row, uint32_t center_col) {
@@ -275,7 +260,7 @@ Image& Image::ctz_convolve(const uint8_t channel, size_t ker_w, size_t ker_h, co
 */
 	return *this;
 }
-
+/*
 const void Image::pad_for_kuwahara(const Image& res) const{
     for(int ch = 0; ch < channel_num; ch++){
         for(int i = 0; i < kuwahara_pad / 2; i++){
@@ -302,7 +287,7 @@ const void Image::pad_for_kuwahara(const Image& res) const{
             }
         }
     }
-}
+}*/
 
 void Image::kuwahara()  {
     double mean, variance;
@@ -336,7 +321,7 @@ void Image::kuwahara()  {
     }
 }
 
-void Image::crop_to_center(const int width, const int height, const Image& res){
+/*void Image::crop_to_center(const int width, const int height, const Image& res){
     for(int ch = 0; ch < channel_num; ch++){
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
@@ -345,7 +330,7 @@ void Image::crop_to_center(const int width, const int height, const Image& res){
         }
     }
     
-}
+}*/
 
 
 #endif

@@ -1,0 +1,4 @@
+<map id="Test::SobelTest" name="Test::SobelTest">
+<area shape="rect" id="node1" title="Test the Sobel filter, descend from GenericTest. Measure time of the filter execution on the whole im..." alt="" coords="12,80,131,107"/>
+<area shape="rect" id="node2" href="$classTest_1_1GenericTest.html" title="Abstract class for testing the various filters implemented." alt="" coords="5,5,137,32"/>
+</map>

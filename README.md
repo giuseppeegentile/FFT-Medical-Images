@@ -8,9 +8,6 @@
         - Anisotropic diffusion 
         - Kuwahara
         - Rebuild 3d volume
-    To do:
-        - Documentation
-        - Report pdf
 
 
 # Instructions

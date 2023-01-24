@@ -1,0 +1,4 @@
+<map id="Test::GaussTest" name="Test::GaussTest">
+<area shape="rect" id="node1" title="Test the gaussian filter, descend from GenericTest. Measure time of the filter execution on the whole..." alt="" coords="10,80,133,107"/>
+<area shape="rect" id="node2" href="$classTest_1_1GenericTest.html" title="Abstract class for testing the various filters implemented." alt="" coords="5,5,137,32"/>
+</map>

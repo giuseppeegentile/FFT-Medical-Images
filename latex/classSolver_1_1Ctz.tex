@@ -1,0 +1,32 @@
+\hypertarget{classSolver_1_1Ctz}{}\doxysection{Solver\+::Ctz Class Reference}
+\label{classSolver_1_1Ctz}\index{Solver::Ctz@{Solver::Ctz}}
+
+
+{\ttfamily \#include $<$Ctz.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSolver_1_1Ctz_a02cb23ba50492ffd29683c68ef76d4fa}\label{classSolver_1_1Ctz_a02cb23ba50492ffd29683c68ef76d4fa}} 
+{\bfseries Ctz} (const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \&input\+\_\+data\+\_\+)
+\item 
+const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \mbox{\hyperlink{classSolver_1_1Ctz_a9cea0ef14eba2143d7873a743b6e3046}{solve}} (bool inverse) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Not used since the dataset is 256x256 image size, therefore the standard \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} is more efficient than the bluestein algorithm implemented here. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSolver_1_1Ctz_a9cea0ef14eba2143d7873a743b6e3046}\label{classSolver_1_1Ctz_a9cea0ef14eba2143d7873a743b6e3046}} 
+\index{Solver::Ctz@{Solver::Ctz}!solve@{solve}}
+\index{solve@{solve}!Solver::Ctz@{Solver::Ctz}}
+\doxysubsubsection{\texorpdfstring{solve()}{solve()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} Solver\+::\+Ctz\+::solve (\begin{DoxyParamCaption}\item[{bool}]{inverse }\end{DoxyParamCaption}) const}
+
+Bluestein algorithm for non power of two arrays. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/solvers/Ctz.\+hpp\item 
+src/solvers/Ctz.\+cpp\end{DoxyCompactItemize}

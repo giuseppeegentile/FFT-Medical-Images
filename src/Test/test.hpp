@@ -9,12 +9,27 @@
 typedef std::vector<Image> ImageVector;
 
 namespace Test{
+    /**
+     * @brief Abstract class for testing the various filters implemented.
+     * 
+     */
     class GenericTest {
         public:
-            GenericTest(ImageVector images_, bool full_test_) : full_test(full_test_), images(images_) {};
+            /**
+             * @brief Construct a new Generic Test object that can test a filter, write the images filtered and build the corresponding 3d volume
+             * 
+             * @param images_ 
+             * @param full_test_ 
+             */
+            GenericTest(ImageVector images_, bool full_test_) : full_test(full_test_), images(images_), copies(images_) {};
 
             virtual void test() = 0;
 
+            /**
+             * @brief Write the sequence of images on the path of the folder
+             * 
+             * @param folder where to write the filtered images.
+             */
             void write(const std::string folder) {
                 volume = folder;
                 const int start_idx = full_test ? 1 : noisy_start_idx;
@@ -24,6 +39,22 @@ namespace Test{
                     images[i - 1].write(Tools::getChar(out), ImageType::JPG);
                 }
             }
+
+            void writeDifference(){
+                std::string diff = volume + "_difference";
+                const int start_idx = full_test ? 1 : noisy_start_idx;
+                const int end_idx = full_test ? 100 : noisy_end_idx;
+                for(int i = start_idx; i < end_idx; i++){
+                    std::string out = "processed_medical_images/" + diff +  "/cthead-8bit0" + std::to_string(i) + ".jpg";
+                    copies[i - 1].diff(images[i - 1]);
+                    copies[i - i].write(Tools::getChar(out), ImageType::JPG);
+                }
+            }
+
+            /**
+             * @brief Build the 3D volume and write the .vtk file on the build directory
+             * 
+             */
             void buildVolume(){
                 vtkSmartPointer<vtkImageData> imageData = vtkSmartPointer<vtkImageData>::New();
 
@@ -61,10 +92,15 @@ namespace Test{
             std::string volume = "";
             bool full_test;
             ImageVector images;
+            ImageVector copies;
     };
 
 
 
+    /**
+     * @brief Test the gaussian filter, descend from GenericTest. Measure time of the filter execution on the whole images.
+     * 
+     */
     class GaussTest : public GenericTest{
         public:
             GaussTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
@@ -85,6 +121,10 @@ namespace Test{
             
     };
 
+    /**
+     * @brief Test the Sobel filter, descend from GenericTest. Measure time of the filter execution on the whole images.
+     * 
+     */
     class SobelTest : public GenericTest{
         public:
             SobelTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};
@@ -106,6 +146,11 @@ namespace Test{
             } 
     };
 
+
+    /**
+     * @brief Test the Kuwahara filter, descend from GenericTest. Measure time of the filter execution on the whole images.
+     * 
+     */
     class KuwaharaTest : public GenericTest{
         public:
             KuwaharaTest(ImageVector images_, bool full_test_) : GenericTest(images_, full_test_) {};
@@ -122,7 +167,10 @@ namespace Test{
             } 
     };
 
-
+    /**
+     * @brief Test the Anisotropic filter, descend from GenericTest. Measure time of the filter execution on the whole images.
+     * 
+     */
     class AnisotropicTest : public GenericTest{
     public:
         AnisotropicTest(ImageVector images_, bool full_test_) :  GenericTest(images_, full_test_) {};

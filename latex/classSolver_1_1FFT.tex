@@ -1,0 +1,88 @@
+\hypertarget{classSolver_1_1FFT}{}\doxysection{Solver\+::F\+FT Class Reference}
+\label{classSolver_1_1FFT}\index{Solver::FFT@{Solver::FFT}}
+
+
+{\ttfamily \#include $<$F\+F\+T.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSolver_1_1FFT_ae591f894b653083a8f465d5235967ab1}{F\+FT}} (const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \&input\+\_\+data\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} object, storing input arrays and assuming first a forward \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} will be performed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSolver_1_1FFT_a846895f722feb960a410fbf95e12dbb6}{solve\+Iterative}} (const bool parallel)
+\begin{DoxyCompactList}\small\item\em Compute iteratively the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}, using Cooley Tuckey. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \mbox{\hyperlink{classSolver_1_1FFT_a73cdae6fca4f602b761ca64d769e6c12}{get\+Output}} ()
+\begin{DoxyCompactList}\small\item\em Returned the Output of the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \mbox{\hyperlink{classSolver_1_1FFT_af685bb0c36acb4f5873a7106f7534695}{get\+Inverse}} ()
+\begin{DoxyCompactList}\small\item\em Get the Inverse of the performed \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+1D \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} solver. Uses the Cooley Tuckey algorithm with O(\+Nlog\+N) complexity. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSolver_1_1FFT_ae591f894b653083a8f465d5235967ab1}\label{classSolver_1_1FFT_ae591f894b653083a8f465d5235967ab1}} 
+\index{Solver::FFT@{Solver::FFT}!FFT@{FFT}}
+\index{FFT@{FFT}!Solver::FFT@{Solver::FFT}}
+\doxysubsubsection{\texorpdfstring{FFT()}{FFT()}}
+{\footnotesize\ttfamily Solver\+::\+F\+F\+T\+::\+F\+FT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \&}]{input\+\_\+data\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} object, storing input arrays and assuming first a forward \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}} will be performed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+data\+\_\+} & the data on which the transform will be performed. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSolver_1_1FFT_af685bb0c36acb4f5873a7106f7534695}\label{classSolver_1_1FFT_af685bb0c36acb4f5873a7106f7534695}} 
+\index{Solver::FFT@{Solver::FFT}!getInverse@{getInverse}}
+\index{getInverse@{getInverse}!Solver::FFT@{Solver::FFT}}
+\doxysubsubsection{\texorpdfstring{getInverse()}{getInverse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} Solver\+::\+F\+F\+T\+::get\+Inverse (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the Inverse of the performed \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSolver_1_1FFT_a73cdae6fca4f602b761ca64d769e6c12}\label{classSolver_1_1FFT_a73cdae6fca4f602b761ca64d769e6c12}} 
+\index{Solver::FFT@{Solver::FFT}!getOutput@{getOutput}}
+\index{getOutput@{getOutput}!Solver::FFT@{Solver::FFT}}
+\doxysubsubsection{\texorpdfstring{getOutput()}{getOutput()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} Solver\+::\+F\+F\+T\+::get\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returned the Output of the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSolver_1_1FFT_a846895f722feb960a410fbf95e12dbb6}\label{classSolver_1_1FFT_a846895f722feb960a410fbf95e12dbb6}} 
+\index{Solver::FFT@{Solver::FFT}!solveIterative@{solveIterative}}
+\index{solveIterative@{solveIterative}!Solver::FFT@{Solver::FFT}}
+\doxysubsubsection{\texorpdfstring{solveIterative()}{solveIterative()}}
+{\footnotesize\ttfamily void Solver\+::\+F\+F\+T\+::solve\+Iterative (\begin{DoxyParamCaption}\item[{const bool}]{parallel = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Compute iteratively the \mbox{\hyperlink{classSolver_1_1FFT}{F\+FT}}, using Cooley Tuckey. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parallel} & true if the parallel version want to be used. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/solvers/F\+F\+T.\+hpp\item 
+src/solvers/F\+F\+T.\+cpp\end{DoxyCompactItemize}

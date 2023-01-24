@@ -1,0 +1,19 @@
+Medical images dataset from\+: \href{https://graphics.stanford.edu/data/voldata/}{\texttt{ https\+://graphics.\+stanford.\+edu/data/voldata/}} -\/ CT study of a cadaver head from the North Carolina Memorial Hospital One file per slice (total of 100 slices) Most intense noise in the 75-\/th, 76-\/th, 77-\/th images.
+
+Done\+:
+\begin{DoxyItemize}
+\item Gaussian filtering
+\item Anisotropic diffusion
+\item Kuwahara
+\item Rebuild 3d volume
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md1}{}\doxysection{Instructions}\label{md_README_autotoc_md1}
+Pull the repo inside the shared folder. Remember to give permission to the folder project (on linux)\+: sudo chmod -\/R 777 F\+F\+T-\/\+Medical-\/\+Images Start the hpc-\/courses docker and do the following\+:
+\begin{DoxyItemize}
+\item module load dealii vtk
+\item mkdir build
+\item cd build
+\item cmake ..
+\item make \&\& ./\+F\+FT
+\end{DoxyItemize}
+
+The 2D processed images are in the build/processed\+\_\+medical\+\_\+images folder. Each subfolder for different filters applied. The .vti 3d images volume are named as filter\+\_\+applied.\+vti. Visualize them in Paraview glance, suggested the M\+R-\/\+Default or M\+R-\/\+T2-\/\+Brain view colors. 

@@ -1,0 +1,7 @@
+<map id="Test::GenericTest" name="Test::GenericTest">
+<area shape="rect" id="node1" title="Abstract class for testing the various filters implemented." alt="" coords="258,5,390,32"/>
+<area shape="rect" id="node2" href="$classTest_1_1AnisotropicTest.html" title="Test the Anisotropic filter, descend from GenericTest. Measure time of the filter execution on the wh..." alt="" coords="5,80,160,107"/>
+<area shape="rect" id="node3" href="$classTest_1_1GaussTest.html" title="Test the gaussian filter, descend from GenericTest. Measure time of the filter execution on the whole..." alt="" coords="184,80,307,107"/>
+<area shape="rect" id="node4" href="$classTest_1_1KuwaharaTest.html" title="Test the Kuwahara filter, descend from GenericTest. Measure time of the filter execution on the whole..." alt="" coords="331,80,477,107"/>
+<area shape="rect" id="node5" href="$classTest_1_1SobelTest.html" title="Test the Sobel filter, descend from GenericTest. Measure time of the filter execution on the whole im..." alt="" coords="502,80,621,107"/>
+</map>

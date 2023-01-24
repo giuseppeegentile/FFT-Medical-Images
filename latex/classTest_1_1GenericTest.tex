@@ -1,0 +1,109 @@
+\hypertarget{classTest_1_1GenericTest}{}\doxysection{Test\+::Generic\+Test Class Reference}
+\label{classTest_1_1GenericTest}\index{Test::GenericTest@{Test::GenericTest}}
+
+
+Abstract class for testing the various filters implemented.  
+
+
+
+
+{\ttfamily \#include $<$test.\+hpp$>$}
+
+
+
+Inheritance diagram for Test\+::Generic\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classTest_1_1GenericTest__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTest_1_1GenericTest_a8937e2cefe96239154f8a2f72138b2e4}{Generic\+Test}} (Image\+Vector images\+\_\+, bool full\+\_\+test\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new Generic Test object that can test a filter, write the images filtered and build the corresponding 3d volume. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_a0af3773c0eb42dac1b53b2e28f76508b}\label{classTest_1_1GenericTest_a0af3773c0eb42dac1b53b2e28f76508b}} 
+virtual void {\bfseries test} ()=0
+\item 
+void \mbox{\hyperlink{classTest_1_1GenericTest_a2c3510f200adfa76894691d15a099214}{write}} (const std\+::string folder)
+\begin{DoxyCompactList}\small\item\em Write the sequence of images on the path of the folder. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_aa7d520b86e045c929c826f5ac5253c74}\label{classTest_1_1GenericTest_aa7d520b86e045c929c826f5ac5253c74}} 
+void {\bfseries write\+Difference} ()
+\item 
+void \mbox{\hyperlink{classTest_1_1GenericTest_ac1e96c16cdc2f8ff4e1d659fdc81c58f}{build\+Volume}} ()
+\begin{DoxyCompactList}\small\item\em Build the 3D volume and write the .vtk file on the build directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_a3c2f686813bca14102289045232a4fb3}\label{classTest_1_1GenericTest_a3c2f686813bca14102289045232a4fb3}} 
+std\+::string {\bfseries volume} = \char`\"{}\char`\"{}
+\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_ad16f286b25a0e5de5b8a3c912e8a1bf8}\label{classTest_1_1GenericTest_ad16f286b25a0e5de5b8a3c912e8a1bf8}} 
+bool {\bfseries full\+\_\+test}
+\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_ac6756f2d36958369b4b080dd4ddcb9e4}\label{classTest_1_1GenericTest_ac6756f2d36958369b4b080dd4ddcb9e4}} 
+Image\+Vector {\bfseries images}
+\item 
+\mbox{\Hypertarget{classTest_1_1GenericTest_ac052c04ddacd7c7abd596f0685a3f030}\label{classTest_1_1GenericTest_ac052c04ddacd7c7abd596f0685a3f030}} 
+Image\+Vector {\bfseries copies}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract class for testing the various filters implemented. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTest_1_1GenericTest_a8937e2cefe96239154f8a2f72138b2e4}\label{classTest_1_1GenericTest_a8937e2cefe96239154f8a2f72138b2e4}} 
+\index{Test::GenericTest@{Test::GenericTest}!GenericTest@{GenericTest}}
+\index{GenericTest@{GenericTest}!Test::GenericTest@{Test::GenericTest}}
+\doxysubsubsection{\texorpdfstring{GenericTest()}{GenericTest()}}
+{\footnotesize\ttfamily Test\+::\+Generic\+Test\+::\+Generic\+Test (\begin{DoxyParamCaption}\item[{Image\+Vector}]{images\+\_\+,  }\item[{bool}]{full\+\_\+test\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Generic Test object that can test a filter, write the images filtered and build the corresponding 3d volume. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em images\+\_\+} & \\
+\hline
+{\em full\+\_\+test\+\_\+} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTest_1_1GenericTest_ac1e96c16cdc2f8ff4e1d659fdc81c58f}\label{classTest_1_1GenericTest_ac1e96c16cdc2f8ff4e1d659fdc81c58f}} 
+\index{Test::GenericTest@{Test::GenericTest}!buildVolume@{buildVolume}}
+\index{buildVolume@{buildVolume}!Test::GenericTest@{Test::GenericTest}}
+\doxysubsubsection{\texorpdfstring{buildVolume()}{buildVolume()}}
+{\footnotesize\ttfamily void Test\+::\+Generic\+Test\+::build\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Build the 3D volume and write the .vtk file on the build directory. 
+
+\mbox{\Hypertarget{classTest_1_1GenericTest_a2c3510f200adfa76894691d15a099214}\label{classTest_1_1GenericTest_a2c3510f200adfa76894691d15a099214}} 
+\index{Test::GenericTest@{Test::GenericTest}!write@{write}}
+\index{write@{write}!Test::GenericTest@{Test::GenericTest}}
+\doxysubsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily void Test\+::\+Generic\+Test\+::write (\begin{DoxyParamCaption}\item[{const std\+::string}]{folder }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write the sequence of images on the path of the folder. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em folder} & where to write the filtered images. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Test/test.\+hpp\end{DoxyCompactItemize}

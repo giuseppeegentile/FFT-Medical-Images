@@ -14,7 +14,9 @@ namespace Solver{
         return n;
     }
 
-
+    /**
+     * Bluestein algorithm for non power of two arrays.
+    */
     const  MyComplexArray Ctz::solve(bool inverse) const {
         const int n = input_data.size();
         const int m =  nearestPowerOf2(2 * n +1);

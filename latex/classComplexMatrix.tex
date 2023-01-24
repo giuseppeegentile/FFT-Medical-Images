@@ -1,0 +1,253 @@
+\hypertarget{classComplexMatrix}{}\doxysection{Complex\+Matrix Class Reference}
+\label{classComplexMatrix}\index{ComplexMatrix@{ComplexMatrix}}
+
+
+Defines the object for a matrix with complex values.  
+
+
+
+
+{\ttfamily \#include $<$Complex\+Matrix.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classComplexMatrix_aeb46c4886471fd93d6c88d39febc6c17}{Complex\+Matrix}} (size\+\_\+t width\+\_\+, size\+\_\+t height\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} object. \end{DoxyCompactList}\item 
+const Complex \& \mbox{\hyperlink{classComplexMatrix_ab643c7e7e106ac1660e0b0ebf66dd9e4}{operator()}} (const size\+\_\+t row, const size\+\_\+t column) const
+\begin{DoxyCompactList}\small\item\em getter of the element row-\/col using (row, col) \end{DoxyCompactList}\item 
+const Complex \mbox{\hyperlink{classComplexMatrix_aab989f2ab2566bc0dbb7a84df818caee}{get}} (const size\+\_\+t row, const size\+\_\+t column) const
+\begin{DoxyCompactList}\small\item\em Equivalent of the \&operator() \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classComplexMatrix_a0d67f6233f8f20d164f622d6742c4f54}{add}} (const size\+\_\+t row, \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} vals)
+\begin{DoxyCompactList}\small\item\em Add in row-\/major a \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classComplexMatrix_a95e75c3579b8188f0d4a398b18e6dd00}{add\+Col\+Major}} (const size\+\_\+t col, \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} vals)
+\begin{DoxyCompactList}\small\item\em Add in col-\/major a \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classComplexMatrix_ac9222ef5873985afeb4d1f480311b69c}{add}} (const size\+\_\+t row, const size\+\_\+t col, Complex val)
+\begin{DoxyCompactList}\small\item\em Add a single element. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \mbox{\hyperlink{classComplexMatrix_ae5ebbc757bccb50eeea1a6c2f93010a7}{get\+Row}} (const size\+\_\+t row)
+\begin{DoxyCompactList}\small\item\em Get a Row of the matrix. \end{DoxyCompactList}\item 
+const size\+\_\+t \mbox{\hyperlink{classComplexMatrix_aaf070781ad8d8d664611f01322bac649}{get\+Width}} () const
+\begin{DoxyCompactList}\small\item\em Get the Width of the matrix. \end{DoxyCompactList}\item 
+const size\+\_\+t \mbox{\hyperlink{classComplexMatrix_ab6484b0f0d7de4449fd997cc56cac03c}{get\+Height}} () const
+\begin{DoxyCompactList}\small\item\em Get the Height of the matrix. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \mbox{\hyperlink{classComplexMatrix_ab7214383c32755e837c48a8dbc856cda}{transpose}} ()
+\begin{DoxyCompactList}\small\item\em Perform the matrix transpose. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} \mbox{\hyperlink{classComplexMatrix_ac1212cabff004b1b84df3cddd775f088}{get\+Storage}} () const
+\begin{DoxyCompactList}\small\item\em Get the Storage (linearized matrix as \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classComplexMatrix_a0a2ad40811d6eac70c934859f7eba676}{dot\+Product}} (\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} kernel, \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&res)
+\begin{DoxyCompactList}\small\item\em Perform element-\/wise product. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the object for a matrix with complex values. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classComplexMatrix_aeb46c4886471fd93d6c88d39febc6c17}\label{classComplexMatrix_aeb46c4886471fd93d6c88d39febc6c17}} 
+\index{ComplexMatrix@{ComplexMatrix}!ComplexMatrix@{ComplexMatrix}}
+\index{ComplexMatrix@{ComplexMatrix}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{ComplexMatrix()}{ComplexMatrix()}}
+{\footnotesize\ttfamily Complex\+Matrix\+::\+Complex\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{width\+\_\+,  }\item[{size\+\_\+t}]{height\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em width\+\_\+} & matrix width \\
+\hline
+{\em height\+\_\+} & matrix height \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classComplexMatrix_ac9222ef5873985afeb4d1f480311b69c}\label{classComplexMatrix_ac9222ef5873985afeb4d1f480311b69c}} 
+\index{ComplexMatrix@{ComplexMatrix}!add@{add}}
+\index{add@{add}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Complex\+Matrix\+::add (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row,  }\item[{const size\+\_\+t}]{col,  }\item[{Complex}]{val }\end{DoxyParamCaption})}
+
+
+
+Add a single element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the row where to add \\
+\hline
+{\em col} & the col where to add \\
+\hline
+{\em val} & the val to add at row-\/col position \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classComplexMatrix_a0d67f6233f8f20d164f622d6742c4f54}\label{classComplexMatrix_a0d67f6233f8f20d164f622d6742c4f54}} 
+\index{ComplexMatrix@{ComplexMatrix}!add@{add}}
+\index{add@{add}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Complex\+Matrix\+::add (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row,  }\item[{\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}}]{vals }\end{DoxyParamCaption})}
+
+
+
+Add in row-\/major a \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & the row where to add \\
+\hline
+{\em vals} & the \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} to add \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classComplexMatrix_a95e75c3579b8188f0d4a398b18e6dd00}\label{classComplexMatrix_a95e75c3579b8188f0d4a398b18e6dd00}} 
+\index{ComplexMatrix@{ComplexMatrix}!addColMajor@{addColMajor}}
+\index{addColMajor@{addColMajor}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{addColMajor()}{addColMajor()}}
+{\footnotesize\ttfamily void Complex\+Matrix\+::add\+Col\+Major (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{col,  }\item[{\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}}]{vals }\end{DoxyParamCaption})}
+
+
+
+Add in col-\/major a \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & the col where to add ~\newline
+ \\
+\hline
+{\em vals} & the \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} to add \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classComplexMatrix_a0a2ad40811d6eac70c934859f7eba676}\label{classComplexMatrix_a0a2ad40811d6eac70c934859f7eba676}} 
+\index{ComplexMatrix@{ComplexMatrix}!dotProduct@{dotProduct}}
+\index{dotProduct@{dotProduct}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{dotProduct()}{dotProduct()}}
+{\footnotesize\ttfamily void Complex\+Matrix\+::dot\+Product (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}}}]{kernel,  }\item[{\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} \&}]{res }\end{DoxyParamCaption})}
+
+
+
+Perform element-\/wise product. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kernel} & the matrix to multiply with this \\
+\hline
+{\em res} & the result of the product \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classComplexMatrix_aab989f2ab2566bc0dbb7a84df818caee}\label{classComplexMatrix_aab989f2ab2566bc0dbb7a84df818caee}} 
+\index{ComplexMatrix@{ComplexMatrix}!get@{get}}
+\index{get@{get}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily const Complex Complex\+Matrix\+::get (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row,  }\item[{const size\+\_\+t}]{column }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Equivalent of the \&operator() 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & \\
+\hline
+{\em column} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+const Complex 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_ab6484b0f0d7de4449fd997cc56cac03c}\label{classComplexMatrix_ab6484b0f0d7de4449fd997cc56cac03c}} 
+\index{ComplexMatrix@{ComplexMatrix}!getHeight@{getHeight}}
+\index{getHeight@{getHeight}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{getHeight()}{getHeight()}}
+{\footnotesize\ttfamily const size\+\_\+t Complex\+Matrix\+::get\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the Height of the matrix. 
+
+\begin{DoxyReturn}{Returns}
+const size\+\_\+t 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_ae5ebbc757bccb50eeea1a6c2f93010a7}\label{classComplexMatrix_ae5ebbc757bccb50eeea1a6c2f93010a7}} 
+\index{ComplexMatrix@{ComplexMatrix}!getRow@{getRow}}
+\index{getRow@{getRow}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{getRow()}{getRow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} Complex\+Matrix\+::get\+Row (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row }\end{DoxyParamCaption})}
+
+
+
+Get a Row of the matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_ac1212cabff004b1b84df3cddd775f088}\label{classComplexMatrix_ac1212cabff004b1b84df3cddd775f088}} 
+\index{ComplexMatrix@{ComplexMatrix}!getStorage@{getStorage}}
+\index{getStorage@{getStorage}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{getStorage()}{getStorage()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} Complex\+Matrix\+::get\+Storage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the Storage (linearized matrix as \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}}) 
+
+\begin{DoxyReturn}{Returns}
+const \mbox{\hyperlink{classMyComplexArray}{My\+Complex\+Array}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_aaf070781ad8d8d664611f01322bac649}\label{classComplexMatrix_aaf070781ad8d8d664611f01322bac649}} 
+\index{ComplexMatrix@{ComplexMatrix}!getWidth@{getWidth}}
+\index{getWidth@{getWidth}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{getWidth()}{getWidth()}}
+{\footnotesize\ttfamily const size\+\_\+t Complex\+Matrix\+::get\+Width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the Width of the matrix. 
+
+\begin{DoxyReturn}{Returns}
+const size\+\_\+t 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_ab643c7e7e106ac1660e0b0ebf66dd9e4}\label{classComplexMatrix_ab643c7e7e106ac1660e0b0ebf66dd9e4}} 
+\index{ComplexMatrix@{ComplexMatrix}!operator()@{operator()}}
+\index{operator()@{operator()}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily const Complex\& Complex\+Matrix\+::operator() (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{row,  }\item[{const size\+\_\+t}]{column }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+getter of the element row-\/col using (row, col) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & \\
+\hline
+{\em column} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+const Complex\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classComplexMatrix_ab7214383c32755e837c48a8dbc856cda}\label{classComplexMatrix_ab7214383c32755e837c48a8dbc856cda}} 
+\index{ComplexMatrix@{ComplexMatrix}!transpose@{transpose}}
+\index{transpose@{transpose}!ComplexMatrix@{ComplexMatrix}}
+\doxysubsubsection{\texorpdfstring{transpose()}{transpose()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} Complex\+Matrix\+::transpose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Perform the matrix transpose. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classComplexMatrix}{Complex\+Matrix}} the transposed matrix 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/types/Complex\+Matrix.\+hpp\item 
+src/types/Complex\+Matrix.\+cpp\end{DoxyCompactItemize}
