@@ -1,2 +1,5 @@
 build/
 .vscode/
+DoxyFile
+DoxyFile.bak
+app
