@@ -11,11 +11,11 @@ int main() {
     omp_set_nested(nesting);
     omp_set_num_threads(n_threads);
 
-    /*std::filesystem::create_directories("processed_medical_images");
+    std::filesystem::create_directories("processed_medical_images");
     std::filesystem::create_directories("processed_medical_images/gaussed");
     std::filesystem::create_directories("processed_medical_images/kuwahara");
     std::filesystem::create_directories("processed_medical_images/sobel");
-    std::filesystem::create_directories("processed_medical_images/anisotropic");*/
+    std::filesystem::create_directories("processed_medical_images/anisotropic");
     std::filesystem::create_directories("processed_medical_images/gaussed_difference");
     std::filesystem::create_directories("processed_medical_images/kuwahara_difference");
     std::filesystem::create_directories("processed_medical_images/sobel_difference");
