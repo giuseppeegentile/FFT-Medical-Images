@@ -50,7 +50,7 @@ class ComplexMatrix {
          * @param row the row where to add 
          * @param vals the MyComplexArray to add
          */
-        void add(const size_t row, MyComplexArray vals);
+        void add(const size_t row, const MyComplexArray &vals);
 
         /**
          * @brief Add in col-major a MyComplexArray
@@ -58,7 +58,7 @@ class ComplexMatrix {
          * @param col the col where to add  
          * @param vals the MyComplexArray to add
          */
-        void addColMajor(const size_t col, MyComplexArray vals);
+        void addColMajor(const size_t col, const MyComplexArray &vals);
 
         /**
          * @brief Add a single element
@@ -112,7 +112,7 @@ class ComplexMatrix {
          * @param kernel the matrix to multiply with this
          * @param res the result of the product
          */
-        void dotProduct(ComplexMatrix kernel, ComplexMatrix& res );
+        void dotProduct(const ComplexMatrix & kernel, ComplexMatrix& res );
 
     private:
         MyComplexArray storage;

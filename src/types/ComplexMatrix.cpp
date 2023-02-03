@@ -6,7 +6,7 @@
 #include "ComplexMatrix.hpp"
 
 
-void ComplexMatrix::add(const size_t row, MyComplexArray vals){
+void ComplexMatrix::add(const size_t row,const MyComplexArray &vals){
     for(size_t i = 0;  i < width; i++)
         storage[row * width + i] = vals[i];
 }
@@ -49,7 +49,7 @@ ComplexMatrix ComplexMatrix::transpose() {
     return ret_matrix;
 }
 
-void ComplexMatrix::dotProduct(ComplexMatrix kernel, ComplexMatrix& res ) {
+void ComplexMatrix::dotProduct(const ComplexMatrix &kernel, ComplexMatrix& res ) {
     for(size_t i = 0; i < height; i++){
         for(size_t j = 0; j < width; j++){
             res.add(i, j, kernel(i,j) * (*this)(i,j));
@@ -62,7 +62,7 @@ const size_t ComplexMatrix::getWidth() const { return width; }
 const size_t ComplexMatrix::getHeight() const {return height; }
 
 
-void ComplexMatrix::addColMajor(const size_t col, MyComplexArray vals){
+void ComplexMatrix::addColMajor(const size_t col,const MyComplexArray &vals){
     for(size_t r = 0; r < height; r++){
         add(r, col, vals[r]);
     }
