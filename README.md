@@ -7,6 +7,7 @@
         - Gaussian filtering 
         - Anisotropic diffusion 
         - Kuwahara
+        - Sobel
         - Rebuild 3d volume
 
 
