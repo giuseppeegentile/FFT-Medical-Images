@@ -21,4 +21,4 @@
         - make && ./FFT
 
     The 2D processed images are in the build/processed_medical_images folder. Each subfolder for different filters applied.
-    The .vti 3d images volume are named as filter_applied.vti. Visualize them in Paraview glance, suggested the MR-Default or MR-T2-Brain view colors.
+    The .vti 3d images volume are named as filter_applied.vti. Visualize them in Paraview glance, suggested the MR-Default or MR-T2-Brain colors.

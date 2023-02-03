@@ -168,7 +168,7 @@ const void Image::anisotropic_diffusion(Image& dst, int num_iterations, float k)
     assert(k < 1 && k > 0);
     Image g_norm(*this);
     
-    #pragma omp parallel for 
+    #pragma omp parallel for schedule(dynamic, 2)
     for(int ch = 0; ch < getChannels(); ch++){
         g_norm.sobel();
         Image newDest(dst);
@@ -294,7 +294,6 @@ void Image::kuwahara()  {
     const double kernel_area = (kuwahara_kernel_size * kuwahara_kernel_size);
     #pragma omp parallel for schedule( dynamic, 2)
     for(int ch = 0; ch < channels; ch++){
-        std::cout << ch << std::endl;
         for (int i = kuwahara_kernel_size/2; i < getHeight() - kuwahara_kernel_size/2; i++) {
             for (int j = kuwahara_kernel_size/2; j < getWidth() - kuwahara_kernel_size/2; j++) {
                 double min_variance = 255.;

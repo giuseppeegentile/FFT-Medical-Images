@@ -179,9 +179,9 @@ namespace Test{
             const int start_idx = full_test ? 1 : noisy_start_idx;
             const int end_idx = full_test ? 100 : noisy_end_idx;
             const double start = omp_get_wtime();
-            #pragma omp parallel for schedule(dynamic, 2)
+            //#pragma omp parallel for schedule(dynamic, 2)
             for(int i = start_idx; i < end_idx; i++){
-                images[i - 1].anisotropic_diffusion(images[i - 1], 300, 0.7);
+                images[i - 1].anisotropic_diffusion(images[i - 1], 100, 0.3);
                 
                 std::cout << "Anisotropic "<< i <<  std::endl;    
             }
