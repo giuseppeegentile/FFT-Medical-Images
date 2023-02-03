@@ -1,5 +1,7 @@
 # FFT-Medical-Images
     Medical images dataset from: https://graphics.stanford.edu/data/voldata/ - CT study of a cadaver head from the North Carolina Memorial Hospital
+    The aim of this project is to reduce the noise generated during CT applying various filtering techinques.
+    The Fourier Transform is used to work with image in frequency domain.
     One file per slice (total of 100 slices)
     Most intense noise in the 75-th, 76-th, 77-th images.
 
